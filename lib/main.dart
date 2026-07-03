@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrbani_vender_app/Screens/ai_capacity_planner_status/widgets/ai_capacity_planner_screen.dart';
+import 'package:qrbani_vender_app/Screens/performance_score/widgets/performance_score_screen.dart';
+import 'package:qrbani_vender_app/blocs/features/ai_capacity_planner/ai_capacity_planner_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/animal_verification/animal_verification_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/drawer/drawer_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/performance_score/performance_score_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/reports/reports_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/time_slot/time_slot_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/upcoming_orders/upcoming_orders_bloc.dart';
@@ -12,6 +16,7 @@ import 'Screens/notifications/notifications_screen.dart';
 import 'Screens/orders/orders_screen.dart';
 import 'Screens/payout/payout_screen.dart';
 import 'Screens/reports/reports_screen.dart';
+import 'Screens/support_help/widgets/support_help_screen.dart';
 import 'Screens/time_slot/time_slot_screen.dart';
 import 'Screens/transaction_history/transaction_history_page.dart';
 import 'blocs/features/inventory/inventory_bloc.dart';
@@ -84,6 +89,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => NotificationBloc(),
         ),
+        BlocProvider(
+            create:(_)=> AICapacityPlannerBloc(),
+        ),
+        BlocProvider(
+            create:(_) =>PerformanceScoreBloc(),
+        ),
       ],
 
 
@@ -109,7 +120,7 @@ class MyApp extends StatelessWidget {
              "/transactions": (context) => const TransactionHistoryPage(),
              "/notifications": (context) => const NotificationsScreen(),
             // "/settings": (context) => const SettingsScreen(),
-            // "/support": (context) => const SupportScreen(),
+            "/support": (context) => const SupportHelpPage(),
           },
         ),
     );

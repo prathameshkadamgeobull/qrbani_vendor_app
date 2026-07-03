@@ -67,13 +67,13 @@ class AppTextStyles {
   //---------------- CARD ----------------//
 
   static const TextStyle cardTitle = TextStyle(
-    fontSize: AppFontSizes.s14,
+    fontSize: AppFontSizes.s16,
     fontWeight: FontWeight.w600,
     color: Colors.black87,
   );
 
   static const TextStyle cardSubtitle = TextStyle(
-    fontSize: AppFontSizes.s13,
+    fontSize: AppFontSizes.s14,
     fontWeight: FontWeight.w500,
     color: Color(0xff666666),
   );

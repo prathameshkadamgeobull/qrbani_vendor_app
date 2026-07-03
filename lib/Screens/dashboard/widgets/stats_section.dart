@@ -224,6 +224,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:qrbani_vender_app/Screens/ai_capacity_planner_status/widgets/ai_capacity_planner_screen.dart';
 
 import '../../../Core/constants/app_text_style.dart';
 import '../../orders/orders_screen.dart';
@@ -254,10 +255,21 @@ class StatsSection extends StatelessWidget {
             children: [
               Expanded(
                 flex: 4,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const AICapacityPlannerPage(),
+              ),
+            );
+          },
                 child: _buildCard(
                   title: "Total Orders",
                   value: totalOrders.toString(),
                 ),
+              ),
               ),
 
               const SizedBox(width: 12),

@@ -187,6 +187,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qrbani_vender_app/Screens/inventory/inventory_screen.dart';
+import 'package:qrbani_vender_app/Screens/performance_score/widgets/performance_score_screen.dart';
 
 import '../../../Core/constants/app_text_style.dart';
 import '../../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
@@ -333,12 +334,12 @@ class CustomBottomNavigation extends StatelessWidget {
 
 
           case 4:
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => const TimeSlotScreen(),
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const PerformanceScorePage(),
+              ),
+            );
           // More
 
             break;

@@ -23,6 +23,7 @@ class AppFontSizes {
 
   // Large Heading
   static const double s28 = 28;
+  static const double s30 = 30;
   static const double s32 = 32;
 
   // Extra Large
