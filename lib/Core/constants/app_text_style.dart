@@ -245,4 +245,135 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: Colors.red,
   );
+  //---------------- EXTRA BODY STYLES ----------------//
+
+  static const TextStyle bodyBold = TextStyle(
+    fontSize: AppFontSizes.s14,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const TextStyle bodyMedium = TextStyle(
+    fontSize: AppFontSizes.s14,
+    fontWeight: FontWeight.w500,
+    color: Colors.black87,
+  );
+
+  static const TextStyle bodySemiBold = TextStyle(
+    fontSize: AppFontSizes.s14,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+
+  static const TextStyle label = TextStyle(
+    fontSize: AppFontSizes.s13,
+    fontWeight: FontWeight.w500,
+    color: Colors.black87,
+  );
+
+  static const TextStyle labelGrey = TextStyle(
+    fontSize: AppFontSizes.s13,
+    fontWeight: FontWeight.w500,
+    color: Color(0xff666666),
+  );
+
+  static const TextStyle smallBold = TextStyle(
+    fontSize: AppFontSizes.s12,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  // ================= ORDER CARD =================
+
+  // static const TextStyle bodyBold = TextStyle(
+  //   fontSize: AppFontSizes.s14,
+  //   fontWeight: FontWeight.w600,
+  //   color: Colors.black,
+  // );
+
+  static const TextStyle statusBadge = TextStyle(
+    fontSize: AppFontSizes.s12,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const TextStyle price = TextStyle(
+    fontSize: AppFontSizes.s16,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+
+  static const TextStyle detailLabel = TextStyle(
+    fontSize: AppFontSizes.s13,
+    fontWeight: FontWeight.w500,
+    color: Color(0xff8A8A8A),
+  );
+  // ===========================
+// Upcoming Orders
+// ===========================
+
+  static const TextStyle upcomingTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const TextStyle upcomingDate = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const TextStyle upcomingTotal = TextStyle(
+    fontSize: 12,
+    color: Color(0xff707070),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const TextStyle upcomingCount = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+
+  static const TextStyle upcomingAnimal = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+    color: Color(0xff666666),
+  );
+
+  static const TextStyle upcomingButcher = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+
+  static const TextStyle upcomingTab = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: Colors.black87,
+  );
+
+  static const TextStyle upcomingTabSelected = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  static const TextStyle verificationBadge = TextStyle(
+    fontSize: AppFontSizes.s15,
+    fontWeight: FontWeight.w600,
+    color: Color(0xff0B8A47),
+  );
+  static const TextStyle verificationPending = TextStyle(
+    fontSize: AppFontSizes.s15,
+    fontWeight: FontWeight.w600,
+    color: Colors.orange,
+  );
+  static const TextStyle verifiedText = TextStyle(
+    fontSize: AppFontSizes.s15,
+    fontWeight: FontWeight.w600,
+    color: Color(0xff0B8A47),
+  );
+
+
 }

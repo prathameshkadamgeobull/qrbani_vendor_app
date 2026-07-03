@@ -22,35 +22,40 @@ import 'upcoming_orders_state.dart';
     await Future.delayed(const Duration(milliseconds: 500));
 
     final orders = [
-
       UpcomingOrderModel(
         hijriDate: "11 Dhul-Hijjah 1446",
         totalOrders: 96,
         butcherCount: 2,
         goatCount: 25,
         sheepCount: 12,
-        camelCount: 18,
-        completedCount: 61,
+        camelCount: 61,
       ),
 
       UpcomingOrderModel(
         hijriDate: "12 Dhul-Hijjah 1446",
-        totalOrders: 102,
-        butcherCount: 3,
-        goatCount: 30,
-        sheepCount: 22,
-        camelCount: 0,
-        completedCount: 50,
+        totalOrders: 110,
+        butcherCount: 2,
+        goatCount: 25,
+        sheepCount: 12,
+        camelCount: 61,
       ),
 
       UpcomingOrderModel(
         hijriDate: "13 Dhul-Hijjah 1446",
-        totalOrders: 80,
+        totalOrders: 95,
         butcherCount: 2,
-        goatCount: 0,
-        sheepCount: 40,
-        camelCount: 10,
-        completedCount: 30,
+        goatCount: 25,
+        sheepCount: 12,
+        camelCount: 61,
+      ),
+
+      UpcomingOrderModel(
+        hijriDate: "14 Dhul-Hijjah 1446",
+        totalOrders: 98,
+        butcherCount: 2,
+        goatCount: 25,
+        sheepCount: 12,
+        camelCount: 61,
       ),
     ];
 

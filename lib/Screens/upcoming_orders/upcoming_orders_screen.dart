@@ -6,7 +6,6 @@ import '../../blocs/features/upcoming_orders/upcoming_orders_bloc.dart';
 import '../../blocs/features/upcoming_orders/upcoming_orders_event.dart';
 import '../../blocs/features/upcoming_orders/upcoming_orders_state.dart';
 
-import '../dashboard/widgets/custom_bottom_nav.dart';
 import 'widgets/upcoming_order_card.dart';
 
 class UpcomingOrdersScreen extends StatefulWidget {
@@ -19,7 +18,7 @@ class UpcomingOrdersScreen extends StatefulWidget {
 
 class _UpcomingOrdersScreenState
     extends State<UpcomingOrdersScreen> {
-  final List<String> tabs = [
+  final List<String> tabs = const [
     "Tomorrow",
     "Day After",
     "This Week",
@@ -28,7 +27,6 @@ class _UpcomingOrdersScreenState
   @override
   void initState() {
     super.initState();
-
     context.read<UpcomingOrdersBloc>().add(
       LoadUpcomingOrders(),
     );
@@ -47,14 +45,12 @@ class _UpcomingOrdersScreenState
             return Column(
               children: [
 
-                UpcomingHeader(
-                  onBack: () {
-                    Navigator.pop(context);
-                  },
+                UpcomingOrdersHeader(
+                  onBack: () => Navigator.pop(context),
                   onNotification: () {},
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 16),
 
                 SizedBox(
                   height: 42,
@@ -63,25 +59,28 @@ class _UpcomingOrdersScreenState
                       horizontal: 16,
                     ),
                     scrollDirection: Axis.horizontal,
+                    itemCount: tabs.length,
                     separatorBuilder: (_, __) =>
                     const SizedBox(width: 10),
-                    itemCount: tabs.length,
                     itemBuilder: (context, index) {
                       final tab = tabs[index];
-
                       final selected =
                           state.selectedTab == tab;
 
-                      return GestureDetector(
+                      return InkWell(
+                        borderRadius:
+                        BorderRadius.circular(22),
                         onTap: () {
                           context
-                              .read<
-                              UpcomingOrdersBloc>()
+                              .read<UpcomingOrdersBloc>()
                               .add(
                             ChangeUpcomingTab(tab),
                           );
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(
+                            milliseconds: 250,
+                          ),
                           padding:
                           const EdgeInsets.symmetric(
                             horizontal: 18,
@@ -89,25 +88,25 @@ class _UpcomingOrdersScreenState
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: selected
-                                ? Colors.white
-                                : Colors.transparent,
+                                ? const Color(0xff0B8A47)
+                                : Colors.white,
                             borderRadius:
-                            BorderRadius.circular(
-                              22,
-                            ),
+                            BorderRadius.circular(22),
                             border: Border.all(
                               color: selected
-                                  ? Colors.grey.shade300
-                                  : Colors.transparent,
+                                  ? const Color(0xff0B8A47)
+                                  : const Color(0xffE5E5E5),
                             ),
                           ),
                           child: Text(
                             tab,
                             style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: selected
-                                  ? FontWeight.bold
-                                  : FontWeight.w500,
+                              fontSize: 13,
+                              fontWeight:
+                              FontWeight.w600,
+                              color: selected
+                                  ? Colors.white
+                                  : Colors.black87,
                             ),
                           ),
                         ),
@@ -127,6 +126,8 @@ class _UpcomingOrdersScreenState
                       : ListView.builder(
                     padding:
                     const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
                       bottom: 20,
                     ),
                     itemCount:
@@ -145,9 +146,6 @@ class _UpcomingOrdersScreenState
           },
         ),
       ),
-
-      // bottomNavigationBar:
-      // const CustomBottomNavigation(),
     );
   }
 }

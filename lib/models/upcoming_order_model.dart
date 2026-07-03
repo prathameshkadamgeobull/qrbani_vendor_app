@@ -3,14 +3,11 @@ import 'package:equatable/equatable.dart';
 class UpcomingOrderModel extends Equatable {
   final String hijriDate;
   final int totalOrders;
-
   final int butcherCount;
 
   final int goatCount;
   final int sheepCount;
   final int camelCount;
-
-  final int completedCount;
 
   const UpcomingOrderModel({
     required this.hijriDate,
@@ -19,7 +16,6 @@ class UpcomingOrderModel extends Equatable {
     required this.goatCount,
     required this.sheepCount,
     required this.camelCount,
-    required this.completedCount,
   });
 
   UpcomingOrderModel copyWith({
@@ -29,7 +25,6 @@ class UpcomingOrderModel extends Equatable {
     int? goatCount,
     int? sheepCount,
     int? camelCount,
-    int? completedCount,
   }) {
     return UpcomingOrderModel(
       hijriDate: hijriDate ?? this.hijriDate,
@@ -38,7 +33,6 @@ class UpcomingOrderModel extends Equatable {
       goatCount: goatCount ?? this.goatCount,
       sheepCount: sheepCount ?? this.sheepCount,
       camelCount: camelCount ?? this.camelCount,
-      completedCount: completedCount ?? this.completedCount,
     );
   }
 
@@ -50,7 +44,6 @@ class UpcomingOrderModel extends Equatable {
       goatCount: json['goatCount'] ?? 0,
       sheepCount: json['sheepCount'] ?? 0,
       camelCount: json['camelCount'] ?? 0,
-      completedCount: json['completedCount'] ?? 0,
     );
   }
 
@@ -62,7 +55,6 @@ class UpcomingOrderModel extends Equatable {
       "goatCount": goatCount,
       "sheepCount": sheepCount,
       "camelCount": camelCount,
-      "completedCount": completedCount,
     };
   }
 
@@ -74,6 +66,5 @@ class UpcomingOrderModel extends Equatable {
     goatCount,
     sheepCount,
     camelCount,
-    completedCount,
   ];
 }

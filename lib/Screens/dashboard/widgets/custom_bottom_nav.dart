@@ -186,16 +186,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrbani_vender_app/Screens/inventory/inventory_screen.dart';
 
 import '../../../Core/constants/app_text_style.dart';
 import '../../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
 import '../../../blocs/features/bottom_nav/bottom_nav_event.dart';
 import '../../../blocs/features/bottom_nav/bottom_nav_state.dart';
+import '../../../blocs/features/reports/reports_bloc.dart';
+import '../../../blocs/features/time_slot/time_slot_bloc.dart';
 import '../../orders/orders_screen.dart';
+import '../../reports/reports_screen.dart';
+import '../../time_slot/time_slot_screen.dart';
 import '../dashboard_screen.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
-  const CustomBottomNavigation({super.key});
+  final int selectedIndex;
+
+  const CustomBottomNavigation({
+    super.key,
+    this.selectedIndex = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -283,7 +293,7 @@ class CustomBottomNavigation extends StatelessWidget {
 
         switch (index) {
           case 0:
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (_) => const DashboardScreen(),
@@ -292,7 +302,7 @@ class CustomBottomNavigation extends StatelessWidget {
             break;
 
           case 1:
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (_) => const OrdersScreen(),
@@ -301,12 +311,36 @@ class CustomBottomNavigation extends StatelessWidget {
             break;
 
           case 2:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const InventoryScreen(),
+              ),
+            );
             break;
 
           case 3:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider(
+                  create: (_) => ReportsBloc(),
+                  child: const ReportsScreen(),
+                ),
+              ),
+            );
             break;
 
+
           case 4:
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (_) => const TimeSlotScreen(),
+            //   ),
+            // );
+          // More
+
             break;
         }
       },

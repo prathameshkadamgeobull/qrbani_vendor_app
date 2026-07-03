@@ -104,10 +104,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
+import '../../blocs/features/bottom_nav/bottom_nav_event.dart';
 import '../../blocs/features/dashboard/dashboard_bloc.dart';
 import '../../blocs/features/dashboard/dashboard_event.dart';
 import '../../blocs/features/dashboard/dasboard_state.dart';
 
+import '../../blocs/features/revenue/revenue_bloc.dart';
+import '../../blocs/features/revenue/revenue_event.dart';
+import '../drawer/widgets/custom_drawer.dart';
+import '../revenue/revenue_screen.dart';
 import 'widgets/custom_bottom_nav.dart';
 import 'widgets/dashboard_header.dart';
 import 'widgets/revenue_card.dart';
@@ -126,20 +132,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
 
+    // Select Dashboard tab
+    context.read<BottomNavBloc>().add(
+      ChangeTabEvent(0),
+    );
+
+    // Load Dashboard data
     context.read<DashboardBloc>().add(
       LoadDashboard(),
     );
   }
-
   Future<void> _refreshDashboard() async {
     context.read<DashboardBloc>().add(
       RefreshDashboardEvent(),
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CustomDrawer(), // <-- ADD THIS LINE
       backgroundColor: const Color(0xffF5F5F5),
 
       body: BlocBuilder<DashboardBloc, DashboardState>(
@@ -172,6 +185,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       RevenueCard(
                         todayRevenue: state.todayRevenue,
                         monthGrowth: state.monthGrowth,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => RevenueBloc()
+                                  ..add(const LoadRevenue()),
+                                child: const RevenueScreen(),
+                              ),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 20),

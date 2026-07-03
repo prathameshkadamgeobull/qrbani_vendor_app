@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../Core/constants/app_text_style.dart';
 import '../../../models/upcoming_order_model.dart';
 import 'status_chip.dart';
 
-class UpcomingOrderCard extends StatelessWidget {
+class UpcomingOrderCard extends StatefulWidget {
   final UpcomingOrderModel order;
 
   const UpcomingOrderCard({
@@ -12,26 +13,34 @@ class UpcomingOrderCard extends StatelessWidget {
   });
 
   @override
+  State<UpcomingOrderCard> createState() => _UpcomingOrderCardState();
+}
+
+class _UpcomingOrderCardState extends State<UpcomingOrderCard> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(
-        horizontal: 16,
+        horizontal: 0,
         vertical: 8,
       ),
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 19,
+        vertical: 19,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(.08),
-            blurRadius: 12,
-            offset: const Offset(0, 3),
-          )
+            color: Colors.black.withOpacity(.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
         ],
       ),
-
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
           /// Header
@@ -41,96 +50,74 @@ class UpcomingOrderCard extends StatelessWidget {
 
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
                     Text(
-                      order.hijriDate,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      widget.order.hijriDate,
+                      style: AppTextStyles.upcomingDate,
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
 
                     Text(
-                      "Total Orders: ${order.totalOrders}",
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.black54,
-                      ),
+                      "Total Orders : ${widget.order.totalOrders}",
+                      style: AppTextStyles.upcomingTotal,
                     ),
                   ],
                 ),
               ),
 
-              Column(
-                children: [
-
-                  const Icon(
-                    Icons.person_outline,
-                    size: 30,
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: const Color(0xffF5F5F5),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.person_outline_rounded,
+                    size: 28,
+                    color: Color(0xff666666),
                   ),
-
-                  const SizedBox(height: 2),
-
-                  Text(
-                    "${order.butcherCount}",
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
 
-          const SizedBox(height: 22),
+          const SizedBox(height: 20),
 
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
+          /// Animal Count Cards
+          Row(
             children: [
 
-              if (order.goatCount > 0)
-                StatusChip(
-                  icon: Icons.pets,
+              Expanded(
+                child: AnimalChip(
                   title: "Goat",
-                  count: order.goatCount,
+                  count: widget.order.goatCount,
                   color: Colors.orange,
-                  background:
-                  const Color(0xffFFF8ED),
                 ),
+              ),
 
-              if (order.sheepCount > 0)
-                StatusChip(
-                  icon: Icons.pets,
+              const SizedBox(width: 10),
+
+              Expanded(
+                child: AnimalChip(
                   title: "Sheep",
-                  count: order.sheepCount,
-                  color: Colors.red,
-                  background:
-                  const Color(0xffFFF3F3),
+                  count: widget.order.sheepCount,
+                  color: Colors.green,
                 ),
+              ),
 
-              if (order.camelCount > 0)
-                StatusChip(
-                  icon: Icons.pets,
+              const SizedBox(width: 10),
+
+              Expanded(
+                child: AnimalChip(
                   title: "Camel",
-                  count: order.camelCount,
+                  count: widget.order.camelCount,
                   color: Colors.brown,
-                  background:
-                  const Color(0xffF8F2EC),
                 ),
-
-              StatusChip(
-                icon: Icons.check_circle_outline,
-                title: "Completed",
-                count: order.completedCount,
-                color: Colors.green,
-                background:
-                const Color(0xffEAF8EF),
               ),
             ],
           ),
