@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../Core/constants/app_text_style.dart';
+import '../../../blocs/features/animal_verification/animal_verification_bloc.dart';
+import '../../../blocs/features/animal_verification/animal_verification_event.dart';
+import '../../../blocs/features/qr_scanner/qr_scanner_bloc.dart';
 import '../../../models/animal_verification_model.dart';
+import '../../qr_scanner/qr_scanner_page.dart';
 
 class AnimalImageCard extends StatefulWidget {
 
@@ -152,42 +157,72 @@ class _AnimalImageCardState
 
           const SizedBox(height: 30),
 
-          Container(
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () async {
 
-            margin: const EdgeInsets.symmetric(horizontal: 18),
+              if(widget.isVerified){
+                return;
+              }
 
-            padding: const EdgeInsets.symmetric(vertical: 12),
-
-            decoration: BoxDecoration(
-
-              color: const Color(0xffE9F8EE),
-
-              borderRadius: BorderRadius.circular(12),
-
-            ),
-
-            child: const Row(
-
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: [
-
-                Icon(
-                  Icons.check_circle,
-                  color: Color(0xff0B8A47),
+              final result = await Navigator.push<String>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => QRScannerBloc(),
+                    child: const QRScannerPage(),
+                  ),
                 ),
+              );
 
-                SizedBox(width: 8),
+              if(!mounted) return;
 
-                Text(
-                  "Verified & Matched",
-                  style: AppTextStyles.verifiedText,
-                ),
+              if(result != null){
 
-              ],
+                context.read<AnimalVerificationBloc>().add(
+                  VerifyAnimal(result),
+                );
+              }
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(horizontal: 18),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              decoration: BoxDecoration(
+                color: widget.isVerified
+                    ? const Color(0xffE9F8EE)
+                    : Colors.orange.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
+                  Icon(
+                    widget.isVerified
+                        ? Icons.check_circle
+                        : Icons.qr_code_scanner,
+                    color: widget.isVerified
+                        ? const Color(0xff0B8A47)
+                        : Colors.orange,
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Text(
+                    widget.isVerified
+                        ? "Verified & Matched"
+                        : "Tap to Scan QR",
+                    style: TextStyle(
+                      color: widget.isVerified
+                          ? const Color(0xff0B8A47)
+                          : Colors.orange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
-
           ),
 
           const SizedBox(height: 20),

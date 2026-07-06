@@ -18,10 +18,13 @@ class LoadAnimalVerification extends AnimalVerificationEvent {
       );
 
   @override
-  List<Object?> get props => [orderNo, animalType];
+  List<Object?> get props => [
+    orderNo,
+    animalType,
+  ];
 }
 
-/// Verify QR / Barcode
+/// Verify QR Code
 class VerifyAnimal extends AnimalVerificationEvent {
   final String qrCode;
 
@@ -31,5 +34,7 @@ class VerifyAnimal extends AnimalVerificationEvent {
   List<Object?> get props => [qrCode];
 }
 
-/// Proceed Button
-class ProceedToSacrifice extends AnimalVerificationEvent {}
+/// Proceed to Sacrifice
+class ProceedToSacrifice extends AnimalVerificationEvent {
+  const ProceedToSacrifice();
+}

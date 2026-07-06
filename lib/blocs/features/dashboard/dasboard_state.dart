@@ -10,6 +10,9 @@ class DashboardState {
   final String hijriDate;
   final String lastUpdated;
   final String currentDate;
+  final String aiDemandTitle;
+  final String aiDemandPeriod;
+  final String aiRecommendation;
 
   DashboardState({
     this.vendorName = "Al Noor Slaughterhouse",
@@ -23,6 +26,10 @@ class DashboardState {
     this.hijriDate = "10 Dhu’l-Hijjah 1446",
     this.lastUpdated = "09:30 AM",
     this.currentDate = "10 Jun 2025",
+
+    this.aiDemandTitle = "High Demand Expected",
+    this.aiDemandPeriod = "10 - 12 Dhu'l-Hijjah",
+    this.aiRecommendation = "Stock up +36% more inventory",
   });
 
   DashboardState copyWith({
@@ -37,6 +44,10 @@ class DashboardState {
     String? hijriDate,
     String? lastUpdated,
     String? currentDate,
+
+    String? aiDemandTitle,
+    String? aiDemandPeriod,
+    String? aiRecommendation,
   }) {
     return DashboardState(
       vendorName: vendorName ?? this.vendorName,
@@ -50,6 +61,11 @@ class DashboardState {
       hijriDate: hijriDate ?? this.hijriDate,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       currentDate: currentDate ?? this.currentDate,
+
+
+      aiDemandTitle: aiDemandTitle ?? this.aiDemandTitle,
+      aiDemandPeriod: aiDemandPeriod ?? this.aiDemandPeriod,
+      aiRecommendation: aiRecommendation ?? this.aiRecommendation,
     );
   }
 }

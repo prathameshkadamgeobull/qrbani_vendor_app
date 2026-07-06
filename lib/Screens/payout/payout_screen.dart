@@ -56,41 +56,51 @@ class _PayoutScreenState extends State<PayoutScreen> {
             return Center(child: Text(state.error!));
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // Scrollable content
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          AvailableBalanceCard(
+                            balance: payout?.availableBalance ?? "",
+                            onRequestPayout: () {
+                              context.read<PayoutBloc>().add(RequestPayout());
+                            },
+                          ),
 
-                AvailableBalanceCard(
-                  balance: payout?.availableBalance ?? "",
-                  onRequestPayout: () {
-                    context.read<PayoutBloc>().add(RequestPayout());
-                  },
-                ),
+                          const SizedBox(height: 16),
 
-                const SizedBox(height: 16),
-
-                PayoutDetailCard(
-                  nextPayout: payout?.nextPayout ?? "",
-                  payoutMethod: payout?.payoutMethod ?? "",
-                  bankName: payout?.bankName ?? "",
-                  accountNumber: payout?.accountNumber ?? "",
-                ),
-
-                const Spacer(),
-
-                PayoutHistoryButton(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TransactionHistoryPage(),
+                          PayoutDetailCard(
+                            nextPayout: payout?.nextPayout ?? "",
+                            payoutMethod: payout?.payoutMethod ?? "",
+                            bankName: payout?.bankName ?? "",
+                            accountNumber: payout?.accountNumber ?? "",
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 15),
-              ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Fixed button
+                  PayoutHistoryButton(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const TransactionHistoryPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         },

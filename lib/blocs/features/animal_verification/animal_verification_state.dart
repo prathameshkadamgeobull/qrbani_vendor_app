@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import '../../../models/animal_verification_model.dart';
 
 class AnimalVerificationState extends Equatable {

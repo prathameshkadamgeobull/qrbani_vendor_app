@@ -17,23 +17,13 @@ class AnimalVerificationBloc
       LoadAnimalVerification event,
       Emitter<AnimalVerificationState> emit,
       ) async {
-    emit(
-      state.copyWith(
-        isLoading: true,
-      ),
-    );
+    emit(state.copyWith(isLoading: true));
 
-    await Future.delayed(
-      const Duration(milliseconds: 700),
-    );
-
-    /// Change this value for testing
-    String animalType = event.animalType;    // String animalType = "Sheep";
-    // String animalType = "Camel";
+    await Future.delayed(const Duration(milliseconds: 700));
 
     late AnimalVerificationModel animal;
 
-    if (animalType.toLowerCase() == "goat") {
+    if (event.animalType.toLowerCase() == "goat") {
       animal = AnimalVerificationModel(
         orderId: event.orderNo,
         animalId: "GOA-2025-001",
@@ -42,7 +32,7 @@ class AnimalVerificationBloc
         qrCode: "QR-GOAT-001",
         image: "assets/images/goat.jpg",
       );
-    } else if (animalType.toLowerCase() == "sheep") {
+    } else if (event.animalType.toLowerCase() == "sheep") {
       animal = AnimalVerificationModel(
         orderId: event.orderNo,
         animalId: "SHP-2025-001",
@@ -66,7 +56,7 @@ class AnimalVerificationBloc
       state.copyWith(
         isLoading: false,
         animal: animal,
-        isVerified: true,
+        isVerified: false,
       ),
     );
   }
@@ -75,19 +65,11 @@ class AnimalVerificationBloc
       VerifyAnimal event,
       Emitter<AnimalVerificationState> emit,
       ) async {
-    emit(
-      state.copyWith(
-        isLoading: true,
-      ),
-    );
 
-    await Future.delayed(
-      const Duration(milliseconds: 500),
-    );
+    print("QR Scanned");
 
     emit(
       state.copyWith(
-        isLoading: false,
         isVerified: true,
       ),
     );
@@ -96,7 +78,5 @@ class AnimalVerificationBloc
   void _proceedToSacrifice(
       ProceedToSacrifice event,
       Emitter<AnimalVerificationState> emit,
-      ) {
-    // TODO: Add navigation or API call here
-  }
+      ) {}
 }

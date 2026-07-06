@@ -20,24 +20,35 @@ class _ProceedButtonState extends State<ProceedButton> {
     return SizedBox(
       width: double.infinity,
       height: 52,
-      child: ElevatedButton.icon(
+      child: ElevatedButton(
         onPressed: widget.onPressed,
-        icon: const Icon(
-          Icons.arrow_forward,
-          color: Colors.white,
-          size: 20,
-        ),
-        label: Text(
-          "Proceed to Sacrifice",
-          style: AppTextStyles.buttonText,
-        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xff0B8A47),
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(30),
           ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Proceed to Sacrifice",
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Icon(
+              Icons.arrow_forward,
+              color: Colors.white,
+              size: 22,
+            ),
+          ],
         ),
       ),
     );

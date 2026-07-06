@@ -43,39 +43,33 @@ class PerformanceScorePage extends StatelessWidget {
               builder: (context, state) {
                 final data = state.model;
 
-                return Padding(
+                return SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-
-                      /// Gauge
                       _buildGauge(data),
-
+                      const SizedBox(height: 24),
+                      _buildDetailsCard(data),
                       const SizedBox(height: 24),
 
-                      /// Details Card
-                      _buildDetailsCard(data),
-
-                      const Spacer(),
-
-                      /// Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {},
-                          child: const Text(
-                            "View Details",
-                            style: AppTextStyles.button,
-                          ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary, // Green color
+                        foregroundColor: AppColors.white,   // White text
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
+                      onPressed: () {},
+                      child: const Text(
+                        "View Details",
+                        style: AppTextStyles.button,
+                      ),
+                    ),
+                  ),
                     ],
                   ),
                 );

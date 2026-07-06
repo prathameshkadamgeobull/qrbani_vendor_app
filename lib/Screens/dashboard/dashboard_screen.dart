@@ -103,16 +103,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrbani_vender_app/Screens/dashboard/widgets/ai_forecast_card.dart';
+import 'package:qrbani_vender_app/Screens/dashboard/widgets/performance_score_card.dart';
 
+import '../../blocs/features/ai_forecast/ai_forecast_bloc.dart';
+import '../../blocs/features/ai_forecast/ai_forecast_event.dart';
 import '../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
 import '../../blocs/features/bottom_nav/bottom_nav_event.dart';
 import '../../blocs/features/dashboard/dashboard_bloc.dart';
 import '../../blocs/features/dashboard/dashboard_event.dart';
 import '../../blocs/features/dashboard/dasboard_state.dart';
 
+import '../../blocs/features/performance_score/performance_score_bloc.dart';
+import '../../blocs/features/performance_score/performance_score_event.dart';
 import '../../blocs/features/revenue/revenue_bloc.dart';
 import '../../blocs/features/revenue/revenue_event.dart';
+import '../ai_forecast/ai_forecast_screen.dart';
 import '../drawer/widgets/custom_drawer.dart';
+import '../performance_score/widgets/performance_score_screen.dart';
 import '../revenue/revenue_screen.dart';
 import 'widgets/custom_bottom_nav.dart';
 import 'widgets/dashboard_header.dart';
@@ -152,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomDrawer(), // <-- ADD THIS LINE
+      drawer: const CustomDrawer(),
       backgroundColor: const Color(0xffF5F5F5),
 
       body: BlocBuilder<DashboardBloc, DashboardState>(
@@ -201,14 +209,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                       const SizedBox(height: 20),
 
-                      /// Future Widgets
-                      ///
-                      /// Orders Overview
-                      /// Sales Graph
-                      /// Notifications
-                      /// etc.
 
-                      const SizedBox(height: 100),
+
+                      AiForecastCard(
+                        demand: state.aiDemandTitle,
+                        period: state.aiDemandPeriod,
+                        recommendation: state.aiRecommendation,
+                        onTap: () {
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => AiForecastBloc()..add(LoadAiForecast()),
+                                child: const AiForecastScreen(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+
+                      PerformanceScoreCard(
+                        rating: 4.7,
+                        status: "Excellent",
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) =>
+                                PerformanceScoreBloc()..add(LoadPerformanceScore()),
+                                child: const PerformanceScorePage(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // const SizedBox(height: 20),
+
                     ],
                   ),
 

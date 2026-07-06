@@ -42,11 +42,10 @@ class _AICapacityPlannerView extends StatelessWidget {
         builder: (context, state) {
           final data = state.model;
 
-          return Padding(
+          return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
               children: [
                 /// Date
                 const Text(
@@ -57,9 +56,9 @@ class _AICapacityPlannerView extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
                   decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.textGrey,),
+                    border: Border.all(color: AppColors.textGrey),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: DropdownButtonHideUnderline(
@@ -68,14 +67,14 @@ class _AICapacityPlannerView extends StatelessWidget {
                       isExpanded: true,
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: const [
-                        DropdownMenuItem<String>(
+                        DropdownMenuItem(
                           value: "10 Dhul-Hijjah 1446",
                           child: Text(
                             "10 Dhul-Hijjah 1446",
                             style: AppTextStyles.bodyLarge,
                           ),
                         ),
-                        DropdownMenuItem<String>(
+                        DropdownMenuItem(
                           value: "11 Dhul-Hijjah 1446",
                           child: Text(
                             "11 Dhul-Hijjah 1446",
@@ -99,12 +98,11 @@ class _AICapacityPlannerView extends StatelessWidget {
                 /// Recommended Capacity Card
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 23,vertical: 23),
+                  padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 23),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.textGrey,
-                    ),
+                    border: Border.all(color: AppColors.textGrey),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,22 +111,17 @@ class _AICapacityPlannerView extends StatelessWidget {
                         "Recommended Capacity",
                         style: AppTextStyles.cardTitle,
                       ),
-
                       const SizedBox(height: 12),
-
                       Text(
                         "${data.recommendedCapacity} Orders",
                         style: AppTextStyles.metric.copyWith(
                           fontSize: AppFontSizes.s30,
                         ),
                       ),
-
                       const SizedBox(height: 10),
-
                       const Text(
                         "Based on historical data & current bookings",
                         style: AppTextStyles.cardSubtitle,
-
                       ),
                     ],
                   ),
@@ -137,10 +130,9 @@ class _AICapacityPlannerView extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 /// Current Capacity Card
-                /// Current Capacity Card
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 22,vertical: 22),
+                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 22),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -188,6 +180,9 @@ class _AICapacityPlannerView extends StatelessWidget {
                     ],
                   ),
                 ),
+
+                // Prevent last card from being hidden behind the bottom button
+                const SizedBox(height: 100),
               ],
             ),
           );

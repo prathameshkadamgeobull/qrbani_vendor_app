@@ -375,5 +375,13 @@ class AppTextStyles {
     color: Color(0xff0B8A47),
   );
 
+  static const TextStyle bold18 = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
 
+  static const TextStyle grey14 = TextStyle(
+    fontSize: 14,
+    color: Colors.grey,
+  );
 }

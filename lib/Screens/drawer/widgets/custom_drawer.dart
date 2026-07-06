@@ -42,23 +42,26 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 /// Drawer Menu
                 Expanded(
                   child: ListView.builder(
-                    padding: EdgeInsets.zero,
                     itemCount: menus.length,
                     itemBuilder: (context, index) {
-                      return DrawerTile(
-                        title: menus[index].title,
-                        isSelected: selected == index,
+                      final menu = menus[index];
+
+                      return ListTile(
+                        leading: Icon(
+                          menu.icon,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                        title: Text(
+                          menu.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                         onTap: () {
-                          context
-                              .read<DrawerBloc>()
-                              .add(ChangeDrawerItem(index));
-
-                          Navigator.pop(context);
-
-                          Navigator.pushNamed(
-                            context,
-                            menus[index].route,
-                          );
+                          Navigator.pushNamed(context, menu.route);
                         },
                       );
                     },

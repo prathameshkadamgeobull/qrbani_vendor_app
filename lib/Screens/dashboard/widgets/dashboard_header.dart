@@ -127,8 +127,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:qrbani_vender_app/Screens/notifications/notifications_screen.dart';
 
 import '../../../Core/constants/app_text_style.dart';
+import '../../profile/profile_page.dart';
 
 
 class DashboardHeader extends StatelessWidget {
@@ -168,6 +170,21 @@ class DashboardHeader extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Builder(
+                builder: (context) => InkWell(
+                  onTap: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 10, top: 2),
+                    child: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
               /// Left Side
               Expanded(
                 child: Column(
@@ -192,11 +209,11 @@ class DashboardHeader extends StatelessWidget {
 
                         const SizedBox(width: 6),
 
-                        const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: Colors.white,
-                          size: 28,
-                        ),
+                        // const Icon(
+                        //   Icons.keyboard_arrow_down_rounded,
+                        //   color: Colors.white,
+                        //   size: 28,
+                        // ),
                       ],
                     ),
                   ],
@@ -204,36 +221,29 @@ class DashboardHeader extends StatelessWidget {
               ),
 
               /// Notification
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+              InkWell(
+                borderRadius: BorderRadius.circular(30),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen(),
                     ),
-                    child: const Icon(
-                      Icons.notifications_none,
-                      color: Color(0xff0B5E3C),
-                      size: 26,
-                    ),
+                  );
+                },
+                child: Container(
+                  height: 38,
+                  width: 38,
+                  decoration: const BoxDecoration(
+                   // color: Colors.green,
+                    shape: BoxShape.circle,
                   ),
-
-                  Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        color: Color(0xffF6A800),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
+                  child: const Icon(
+                    Icons.notification_add_outlined,
+                    color: Colors.white,
+                    size: 27,
                   ),
-                ],
+                ),
               ),
             ],
           ),

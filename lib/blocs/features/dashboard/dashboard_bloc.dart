@@ -18,6 +18,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           todayOrders: 18,
           inProgressOrders: 18,
           pendingOrders: 27,
+
+          aiDemandTitle: "High Demand Expected",
+          aiDemandPeriod: "10 - 12 Dhu'l-Hijjah",
+          aiRecommendation: "Stock up +36% more inventory",
         ),
       );
     });

@@ -6,17 +6,24 @@ import 'package:qrbani_vender_app/blocs/features/ai_capacity_planner/ai_capacity
 import 'package:qrbani_vender_app/blocs/features/animal_verification/animal_verification_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/drawer/drawer_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/performance_score/performance_score_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/live_video/live_video_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/profile/profile_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/reports/reports_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/settings/settings_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/time_slot/time_slot_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/upcoming_orders/upcoming_orders_bloc.dart';
 
 import 'Screens/dashboard/dashboard_screen.dart';
 import 'Screens/inventory/inventory_screen.dart';
+import 'Screens/live_video/live_video_page.dart';
 import 'Screens/notifications/notifications_screen.dart';
 import 'Screens/orders/orders_screen.dart';
 import 'Screens/payout/payout_screen.dart';
+import 'Screens/profile/profile_page.dart';
+import 'Screens/profile/repository/profile_repository.dart';
 import 'Screens/reports/reports_screen.dart';
 import 'Screens/support_help/widgets/support_help_screen.dart';
+import 'Screens/settings/settings_screen.dart';
 import 'Screens/time_slot/time_slot_screen.dart';
 import 'Screens/transaction_history/transaction_history_page.dart';
 import 'blocs/features/inventory/inventory_bloc.dart';
@@ -90,11 +97,24 @@ class MyApp extends StatelessWidget {
           create: (_) => NotificationBloc(),
         ),
         BlocProvider(
+// <<<<<<< HEAD
             create:(_)=> AICapacityPlannerBloc(),
         ),
         BlocProvider(
             create:(_) =>PerformanceScoreBloc(),
         ),
+            BlocProvider(
+            create: (_) => SettingsBloc(),
+        ),
+          BlocProvider(
+          create: (_) => ProfileBloc(ProfileRepository()),
+        child: const ProfilePage(),
+          ),
+        BlocProvider(
+          create: (_) => LiveVideoBloc(),
+          child: const LiveVideoPage(),
+        ),
+
       ],
 
 
@@ -119,8 +139,11 @@ class MyApp extends StatelessWidget {
              "/payouts": (context) => const PayoutScreen(),
              "/transactions": (context) => const TransactionHistoryPage(),
              "/notifications": (context) => const NotificationsScreen(),
-            // "/settings": (context) => const SettingsScreen(),
+             "/settings": (context) => const SettingsScreen(),
             "/support": (context) => const SupportHelpPage(),
+
+             "/settings": (context) => const SettingsScreen(),
+            // "/support": (context) => const SupportScreen(),
           },
         ),
     );

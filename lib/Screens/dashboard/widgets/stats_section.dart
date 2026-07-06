@@ -255,6 +255,7 @@ class StatsSection extends StatelessWidget {
             children: [
               Expanded(
                 flex: 4,
+// <<<<<<< HEAD
         child: InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: () {
@@ -268,7 +269,13 @@ class StatsSection extends StatelessWidget {
                 child: _buildCard(
                   title: "Total Orders",
                   value: totalOrders.toString(),
+                  icon: Icons.shopping_bag_outlined,
+                  iconColor: Colors.blue,
                 ),
+                // child: _buildCard(
+                //   title: "Total Orders",
+                //   value: totalOrders.toString(),
+                // ),
               ),
               ),
 
@@ -276,9 +283,16 @@ class StatsSection extends StatelessWidget {
 
               Expanded(
                 flex: 3,
+                // child: _buildCard(
+                //   title: "Completed",
+                //   value: completedOrders.toString(),
+                // ),
+
                 child: _buildCard(
                   title: "Completed",
                   value: completedOrders.toString(),
+                  icon: Icons.check_circle_outline,
+                  iconColor: Colors.green,
                 ),
               ),
 
@@ -305,10 +319,17 @@ class StatsSection extends StatelessWidget {
                       ),
                     );
                   },
+                  // child: _buildCard(
+                  //   title: "Today",
+                  //   value: todayOrders.toString(),
+                  //   valueColor: const Color(0xff0C8A48),
+                  // ),
                   child: _buildCard(
                     title: "Today",
                     value: todayOrders.toString(),
                     valueColor: const Color(0xff0C8A48),
+                    icon: Icons.today_outlined,
+                    iconColor: Colors.orange,
                   ),
                 ),
               ),
@@ -321,9 +342,16 @@ class StatsSection extends StatelessWidget {
             children: [
               Expanded(
                 flex: 4,
-                child: _buildCard(
+                // child: _buildCard(
+                //   title: "In Progress",
+                //   value: inProgressOrders.toString(),
+                // ),
+
+               child:  _buildCard(
                   title: "In Progress",
                   value: inProgressOrders.toString(),
+                  icon: Icons.local_shipping_outlined,
+                  iconColor: Colors.deepPurple,
                 ),
               ),
 
@@ -342,23 +370,66 @@ class StatsSection extends StatelessWidget {
     );
   }
 
+  // Widget _buildCard({
+  //   required String title,
+  //   required String value,
+  //   Color valueColor = Colors.black,
+  // }) {
+  //   return Container(
+  //     height: 92,
+  //     padding: const EdgeInsets.symmetric(
+  //       horizontal: 12,
+  //       vertical: 15  ,
+  //     ),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(18),
+  //       border: Border.all(
+  //         color: const Color(0xffECECEC),
+  //       ),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.grey.withOpacity(.08),
+  //           blurRadius: 12,
+  //           offset: const Offset(0, 3),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           title,
+  //           style: AppTextStyles.statTitle,
+  //         ),
+  //
+  //         const Spacer(),
+  //
+  //         Text(
+  //           value,
+  //           style: AppTextStyles.statValue.copyWith(
+  //             color: valueColor,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _buildCard({
     required String title,
     required String value,
+    required IconData icon,
+    required Color iconColor,
     Color valueColor = Colors.black,
   }) {
     return Container(
-      height: 92,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 15  ,
-      ),
+      height: 138,
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xffECECEC),
-        ),
+        border: Border.all(color: const Color(0xffECECEC)),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(.08),
@@ -368,19 +439,42 @@ class StatsSection extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            title,
-            style: AppTextStyles.statTitle,
+          Container(
+            height: 42,
+            width: 42,
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: iconColor,
+              size: 22,
+            ),
           ),
 
-          const Spacer(),
+          const SizedBox(height: 10),
+
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.statTitle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+
+          const SizedBox(height: 8),
 
           Text(
             value,
+            textAlign: TextAlign.center,
             style: AppTextStyles.statValue.copyWith(
               color: valueColor,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
@@ -392,17 +486,12 @@ class StatsSection extends StatelessWidget {
     required String value,
   }) {
     return Container(
-      height: 92,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
+      height: 150,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xffECECEC),
-        ),
+        border: Border.all(color: const Color(0xffECECEC)),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(.08),
@@ -412,41 +501,40 @@ class StatsSection extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Container(
+            height: 42,
+            width: 42,
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(.12),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.pending_actions_outlined,
+              color: Colors.orange,
+              size: 22,
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
           const Text(
             "Pending",
+            textAlign: TextAlign.center,
             style: AppTextStyles.statTitle,
           ),
 
-          const Spacer(),
+          const SizedBox(height: 8),
 
-          Row(
-            children: [
-              Text(
-                value,
-                style: AppTextStyles.statValue,
-              ),
-
-              const Spacer(),
-
-              Container(
-                height: 34,
-                width: 34,
-                decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(.12),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.access_time,
-                  color: Colors.orange,
-                  size: 18,
-                ),
-              ),
-            ],
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.statValue,
           ),
         ],
       ),
     );
   }
-}
+  }

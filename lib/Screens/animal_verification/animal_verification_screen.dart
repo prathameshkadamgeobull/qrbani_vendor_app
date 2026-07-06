@@ -6,6 +6,8 @@ import '../../blocs/features/animal_verification/animal_verification_bloc.dart';
 import '../../blocs/features/animal_verification/animal_verification_event.dart';
 import '../../blocs/features/animal_verification/animal_verification_state.dart';
 
+import '../../blocs/features/live_video/live_video_bloc.dart';
+import '../live_video/live_video_page.dart';
 import 'widgets/animal_image_card.dart';
 import 'widgets/proceed_button.dart';
 import 'widgets/verification_header.dart';
@@ -118,20 +120,28 @@ class _AnimalVerificationScreenState
                         AnimalImageCard(
                           animal: animal,
                           image: getAnimalAsset(animal.type),
-                          isVerified: true,
+                          isVerified: state.isVerified,
                         ),
 
                         const SizedBox(height: 25),
 
                         ProceedButton(
                           onPressed: () {
-
-                            context
-                                .read<AnimalVerificationBloc>()
-                                .add(
+                            /// Call Bloc Event
+                            context.read<AnimalVerificationBloc>().add(
                               ProceedToSacrifice(),
                             );
 
+                            /// Navigate to Live Video Page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                  create: (_) => LiveVideoBloc(),
+                                  child: const LiveVideoPage(),
+                                ),
+                              ),
+                            );
                           },
                         ),
 
