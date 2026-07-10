@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
+import '../../blocs/features/bottom_nav/bottom_nav_event.dart';
 import '../../blocs/features/reports/reports_bloc.dart';
 import '../../blocs/features/reports/reports_event.dart';
 import '../../blocs/features/reports/reports_state.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../dashboard/widgets/custom_bottom_nav.dart';
 import 'widgets/custom_report_button.dart';
 import 'widgets/report_item.dart';
 
@@ -25,7 +28,23 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+      if (!didPop) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          "/dashboard",
+              (route) => false,
+        );
+
+        context.read<BottomNavBloc>().add(
+          ChangeTabEvent(0),
+        );
+      }
+    },
+    child:
+      Scaffold(
       backgroundColor: const Color(0xffF8F8F8),
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -72,11 +91,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       },
                     ),
                   ),
-
+                  SizedBox(height: 30),
                   CustomReportButton(
                     onPressed: () {},
                   ),
-                  SizedBox(height: 20),
+
                 ],
               );
             }
@@ -87,6 +106,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
           },
         ),
       ),
+      bottomNavigationBar: const CustomBottomNavigation(),
+      ),
     );
   }
+
 }

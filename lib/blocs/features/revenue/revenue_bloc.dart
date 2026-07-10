@@ -36,7 +36,7 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
           chartValues: [
             80000,
             65000,
-            125000,
+            125000, 
             105000,
             118000,
             160000,
@@ -52,7 +52,7 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
             "9 Jun",
             "10 Jun",
             "11 Jun",
-            "",
+            "12 Jun",
           ],
         ),
       ),

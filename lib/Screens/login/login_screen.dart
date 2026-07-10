@@ -94,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 40),
                    TextField(
                       controller: phoneController,
+                     cursorColor: Colors.green,
                        keyboardType: TextInputType.phone,
                       maxLength: 10,
                      onChanged: (value) {
@@ -154,6 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (state.otpSent)
                     TextField(
                       controller: otpController,
+                      cursorColor: Colors.green,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         context.read<LoginBloc>().add(
@@ -268,7 +270,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           SendOtpPressed(),
                         );
                       },
-                      child: const Text("Resend OTP"),
+                      child: const Text("Resend OTP",
+                      style: TextStyle(
+                        color: Colors.green,
+                      ),),
                     ),
 
                   const SizedBox(height: 30),

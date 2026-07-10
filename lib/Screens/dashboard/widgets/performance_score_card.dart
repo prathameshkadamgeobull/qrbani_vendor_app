@@ -18,7 +18,7 @@ class PerformanceScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
         onTap: onTap,
@@ -37,13 +37,13 @@ class PerformanceScoreCard extends StatelessWidget {
                 height: 56,
                 width: 56,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(.12),
+                  color: AppColors.primary ,  //.withOpacity(.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
                   Icons.star_rounded,
-                  color: AppColors.primary,
-                  size: 32,
+                  color: AppColors.white,
+                  size: 34,
                 ),
               ),
 

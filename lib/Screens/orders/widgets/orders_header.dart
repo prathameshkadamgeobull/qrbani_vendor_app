@@ -276,7 +276,7 @@
                         children: [
 
                           const Icon(
-                            Icons.notifications_none,
+                            Icons.filter_list,
                             size: 24,
                           ),
 

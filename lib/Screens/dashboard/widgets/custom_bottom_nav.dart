@@ -212,8 +212,10 @@ class CustomBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BottomNavBloc, BottomNavState>(
       builder: (context, state) {
-        return Container(
-          height:94,
+        final bottomPadding = MediaQuery.of(context).padding.bottom;
+        return
+          Container(
+            height: 65 + bottomPadding,
           decoration: const BoxDecoration(
             color: Colors.white,
             border: Border(
@@ -226,53 +228,58 @@ class CustomBottomNavigation extends StatelessWidget {
               topRight: Radius.circular(26),
             ),
           ),
-          child: SafeArea(
-            top: false,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _navItem(
-                  context,
-                  index: 0,
-                  currentIndex: state.currentIndex,
-                  icon: Icons.home_rounded,
-                  title: "Dashboard",
-                ),
-
-                _navItem(
-                  context,
-                  index: 1,
-                  currentIndex: state.currentIndex,
-                  icon: Icons.assignment_outlined,
-                  title: "Orders",
-                ),
-
-                _navItem(
-                  context,
-                  index: 2,
-                  currentIndex: state.currentIndex,
-                  icon: Icons.inventory_2_outlined,
-                  title: "Inventory",
-                ),
-
-                _navItem(
-                  context,
-                  index: 3,
-                  currentIndex: state.currentIndex,
-                  icon: Icons.bar_chart_outlined,
-                  title: "Reports",
-                ),
-
-                _navItem(
-                  context,
-                  index: 4,
-                  currentIndex: state.currentIndex,
-                  icon: Icons.menu,
-                  title: "More",
-                ),
-              ],
+            child: Padding(
+              padding: EdgeInsets.only(bottom: bottomPadding),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _navItem(
+                      context,
+                      index: 0,
+                      currentIndex: state.currentIndex,
+                      icon: Icons.home_rounded,
+                      title: "Dashboard",
+                    ),
+                  ),
+                  Expanded(
+                    child: _navItem(
+                      context,
+                      index: 1,
+                      currentIndex: state.currentIndex,
+                      icon: Icons.assignment_outlined,
+                      title: "Orders",
+                    ),
+                  ),
+                  Expanded(
+                    child: _navItem(
+                      context,
+                      index: 2,
+                      currentIndex: state.currentIndex,
+                      icon: Icons.inventory_2_outlined,
+                      title: "Inventory",
+                    ),
+                  ),
+                  Expanded(
+                    child: _navItem(
+                      context,
+                      index: 3,
+                      currentIndex: state.currentIndex,
+                      icon: Icons.bar_chart_outlined,
+                      title: "Reports",
+                    ),
+                  ),
+                  // Expanded(
+                  //   child: _navItem(
+                  //     context,
+                  //     index: 4,
+                  //     currentIndex: state.currentIndex,
+                  //     icon: Icons.menu,
+                  //     title: "More",
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
-          ),
         );
       },
     );
@@ -287,23 +294,83 @@ class CustomBottomNavigation extends StatelessWidget {
       }) {
     final bool selected = index == currentIndex;
 
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final iconSize = screenWidth < 360 ? 20.0 : 24.0;
+    final fontSize = screenWidth < 360 ? 10.0 : 12.0;
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: () {
-        context.read<BottomNavBloc>().add(ChangeTabEvent(index));
+      // onTap: () {
+      //   context.read<BottomNavBloc>().add(ChangeTabEvent(index));
+      //
+      //   switch (index) {
+      //     case 0:
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (_) => const DashboardScreen(),
+      //         ),
+      //       );
+      //       break;
+      //
+      //     case 1:
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (_) => const OrdersScreen(),
+      //         ),
+      //       );
+      //       break;
+      //
+      //     case 2:
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (_) => const InventoryScreen(),
+      //         ),
+      //       );
+      //       break;
+      //
+      //     case 3:
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (_) => BlocProvider(
+      //             create: (_) => ReportsBloc(),
+      //             child: const ReportsScreen(),
+      //           ),
+      //         ),
+      //       );
+      //       break;
+      //
+      //     case 4:
+      //     // More Screen
+      //       break;
+      //   }
+      // },
+      onTap: () async {
+        if (index == currentIndex) return;
+
+        final previousIndex = currentIndex;
+
+        context.read<BottomNavBloc>().add(
+          ChangeTabEvent(index),
+        );
 
         switch (index) {
           case 0:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const DashboardScreen(),
-              ),
-            );
+            // await Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (_) => const DashboardScreen(),
+            //   ),
+            // );
+            await Navigator.pushNamed(context, "/dashboard");
             break;
 
           case 1:
-            Navigator.pushReplacement(
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => const OrdersScreen(),
@@ -312,7 +379,7 @@ class CustomBottomNavigation extends StatelessWidget {
             break;
 
           case 2:
-            Navigator.pushReplacement(
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => const InventoryScreen(),
@@ -321,59 +388,61 @@ class CustomBottomNavigation extends StatelessWidget {
             break;
 
           case 3:
-            Navigator.pushReplacement(
+            await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => BlocProvider(
-                  create: (_) => ReportsBloc(),
+                builder: (_) => BlocProvider.value(
+                  value: context.read<ReportsBloc>(),
                   child: const ReportsScreen(),
                 ),
               ),
             );
             break;
 
+          // case 4:
+          //   await Navigator.push(
+          //       context,
+          //   MaterialPageRoute(builder: (_) => BlocProvider.value(
+          //     value: context.read<ReportsBloc>(),
+          //     //child: const ReportsScreen(),
+          //   ),
+          //   ),
+          //   );
+          //   break;
+        }
 
-          case 4:
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const PerformanceScorePage(),
-              ),
-            );
-          // More
-
-            break;
+        if (context.mounted) {
+          context.read<BottomNavBloc>().add(
+            ChangeTabEvent(previousIndex),
+          );
         }
       },
-      child: SizedBox(
-        width: 70,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 26,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: iconSize,
+            color: selected
+                ? const Color(0xff0B8A47)
+                : const Color(0xff5B616E),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.navLabel.copyWith(
+              fontSize: fontSize,
+              fontWeight:
+              selected ? FontWeight.w600 : FontWeight.w500,
               color: selected
                   ? const Color(0xff0B8A47)
                   : const Color(0xff5B616E),
             ),
-
-            const SizedBox(height: 6),
-
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.navLabel.copyWith(
-                color: selected
-                    ? const Color(0xff0B8A47)
-                    : const Color(0xff5B616E),
-                fontWeight:
-                selected ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

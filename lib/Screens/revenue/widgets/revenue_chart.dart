@@ -84,7 +84,7 @@ class RevenueChart extends StatelessWidget {
                     child: Text(
                       revenue.chartDates[index],
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 9,
                         color: Colors.grey,
                       ),
                     ),

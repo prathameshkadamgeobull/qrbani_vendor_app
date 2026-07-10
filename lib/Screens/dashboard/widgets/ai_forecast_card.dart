@@ -20,7 +20,7 @@ class AiForecastCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 18),
+        margin: const EdgeInsets.symmetric(horizontal: 6),
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,

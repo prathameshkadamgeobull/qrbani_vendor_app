@@ -37,7 +37,22 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+      if (!didPop) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          "/dashboard",
+              (route) => false,
+        );
+
+        context.read<BottomNavBloc>().add(
+          ChangeTabEvent(0),
+        );
+      }
+    },
+      child: Scaffold(
       backgroundColor: const Color(0xffF6F6F6),
 
       bottomNavigationBar: const CustomBottomNavigation(),
@@ -162,6 +177,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           },
         ),
       ),
+      ),
     );
+
   }
 }
