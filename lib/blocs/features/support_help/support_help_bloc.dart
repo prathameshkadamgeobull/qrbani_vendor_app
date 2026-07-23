@@ -24,11 +24,11 @@ class SupportHelpBloc
           title: "Contact Support",
           icon: Icons.support_agent,
         ),
-        SupportItem(
-          title: "Live Chat",
-          subtitle: "Available 24/7",
-          icon: Icons.phone_in_talk_outlined,
-        ),
+        // SupportItem(
+        //   title: "Live Chat",
+        //   subtitle: "Available 24/7",
+        //   icon: Icons.phone_in_talk_outlined,
+        // ),
         SupportItem(
           title: "Report an Issue",
           icon: Icons.report_problem_outlined,
@@ -42,9 +42,12 @@ class SupportHelpBloc
     });
 
     on<SupportItemTapped>((event, emit) {
-      // Navigation later
+      emit(
+        state.copyWith(
+          navigateIndex: event.index,
+        ),
+      );
     });
-
     on<CallSupport>((event, emit) {
       // Call functionality later
     });

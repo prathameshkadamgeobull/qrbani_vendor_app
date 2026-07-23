@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../../Core/constants/app_colors.dart';
@@ -24,6 +31,84 @@ class PerformanceScorePage extends StatelessWidget {
 
       class _PerformanceScoreView extends StatelessWidget {
         const _PerformanceScoreView();
+
+        Future<File> generateReportPdf(dynamic data) async {
+          final pdf = pw.Document();
+
+          pdf.addPage(
+            pw.Page(
+              pageFormat: PdfPageFormat.a4,
+              build: (_) {
+                return pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text(
+                      "Performance Score Report",
+                      style: pw.TextStyle(
+                        fontSize: 24,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+
+                    pw.SizedBox(height: 20),
+
+                    pw.Text(
+                      "Date: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                    ),
+
+                    pw.SizedBox(height: 20),
+
+                    pw.Text("Performance Score : ${data.rating}"),
+                    pw.Text("Status : ${data.status}"),
+                    pw.Text("Order Completion : ${data.orderCompletion}%"),
+                    pw.Text("On-time Processing : ${data.onTimeProcessing}%"),
+                    pw.Text("Customer Rating : ${data.customerRating}/5"),
+                    pw.Text("Response Time : ${data.responseTime}"),
+                  ],
+                );
+              },
+            ),
+          );
+
+          final directory = await getApplicationDocumentsDirectory();
+
+          final file = File(
+            "${directory.path}/performance_score.pdf",
+          );
+
+          await file.writeAsBytes(await pdf.save());
+
+          return file;
+        }
+
+        Future<void> downloadPdf(
+            BuildContext context,
+            dynamic data,
+            ) async {
+          final file = await generateReportPdf(data);
+
+          await FilePicker.platform.saveFile(
+            dialogTitle: 'Save Performance Report',
+            fileName: 'performance_score.pdf',
+            bytes: await file.readAsBytes(),
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("PDF saved successfully"),
+            ),
+          );
+        }
+
+        Future<void> sharePdf(dynamic data) async {
+          final file = await generateReportPdf(data);
+
+          await Share.shareXFiles(
+            [XFile(file.path)],
+            text: 'Performance Score Report',
+          );
+        }
+
 
         @override
         Widget build(BuildContext context) {
@@ -52,24 +137,73 @@ class PerformanceScorePage extends StatelessWidget {
                       _buildDetailsCard(data),
                       const SizedBox(height: 24),
 
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary, // Green color
-                        foregroundColor: AppColors.white,   // White text
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: OutlinedButton.icon(
+                                onPressed: () async {
+                                  await sharePdf(data);
+                                },
+                                icon: const Icon(
+                                  Icons.share_outlined,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                                label: Text(
+                                  "Share",
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: AppFontSizes.bodyMedium, // or bodyLarge
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(
+                                    color: AppColors.primary,
+                                    width: 1.5,
+                                  ),
+                                  backgroundColor: AppColors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 16),
+
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  await downloadPdf(context, data);
+                                },
+                                icon: const Icon(
+                                  Icons.download_rounded,
+                                  color: AppColors.white,
+                                  size: 20,
+                                ),
+                                label: const Text(
+                                  "Download",
+                                  style: AppTextStyles.button,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: AppColors.white,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        "View Details",
-                        style: AppTextStyles.button,
-                      ),
-                    ),
-                  ),
                     ],
                   ),
                 );

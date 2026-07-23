@@ -26,7 +26,6 @@ class StatsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           const Text(
             "    Order Statistics",
             style: TextStyle(
@@ -47,6 +46,16 @@ class StatsSection extends StatelessWidget {
                   icon: Icons.shopping_bag_outlined,
                   iconColor: Colors.blue,
                   backgroundColor: const Color(0xffF5F9FF),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const OrdersScreen(
+                          initialStatus: "All",
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -59,6 +68,16 @@ class StatsSection extends StatelessWidget {
                   icon: Icons.check_circle_outline,
                   iconColor: Colors.green,
                   backgroundColor: const Color(0xffF3FBF5),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const OrdersScreen(
+                          initialStatus: "Completed",
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -80,7 +99,9 @@ class StatsSection extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const OrdersScreen(),
+                        builder: (_) => const OrdersScreen(
+                          initialStatus: "All",
+                        ),
                       ),
                     );
                   },
@@ -96,6 +117,16 @@ class StatsSection extends StatelessWidget {
                   icon: Icons.local_shipping_outlined,
                   iconColor: Colors.deepPurple,
                   backgroundColor: const Color(0xffF5F5FF),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const OrdersScreen(
+                          initialStatus: "In Progress",
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -104,9 +135,20 @@ class StatsSection extends StatelessWidget {
           const SizedBox(height: 10),
 
           /// Pending Card
-          SizedBox(
-            width: double.infinity,
+          InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const OrdersScreen(
+                    initialStatus: "Pending",
+                  ),
+                ),
+              );
+            },
             child: Container(
+              width: double.infinity,
               height: 110,
               decoration: BoxDecoration(
                 color: const Color(0xffFFF8EE),
@@ -121,7 +163,6 @@ class StatsSection extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  /// LEFT CONTENT
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -150,7 +191,6 @@ class StatsSection extends StatelessWidget {
                     ),
                   ),
 
-                  /// ICON
                   Positioned(
                     right: 20,
                     top: 0,
@@ -175,9 +215,8 @@ class StatsSection extends StatelessWidget {
               ),
             ),
           ),
-        ], // <-- children of Column
-      ), // <-- Column
-    ); // <-- Padding
+        ],
+      ),
+    );
   }
 }
-

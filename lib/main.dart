@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qrbani_vender_app/Screens/ai_capacity_planner_status/widgets/ai_capacity_planner_screen.dart';
+import 'package:qrbani_vender_app/Screens/inventory_report/inventory_report_screen.dart';
+import 'package:qrbani_vender_app/Screens/inventory_report/repository/inventory_report_repository.dart';
+import 'package:qrbani_vender_app/Screens/payout_report/payout_report_screen.dart';
 import 'package:qrbani_vender_app/Screens/performance_score/widgets/performance_score_screen.dart';
+import 'package:qrbani_vender_app/Screens/revenue_report/revenue_screen.dart';
+import 'package:qrbani_vender_app/Screens/review_payout/review_payout_page.dart';
 import 'package:qrbani_vender_app/blocs/features/ai_capacity_planner/ai_capacity_planner_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/animal_verification/animal_verification_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/drawer/drawer_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/inventory_report_model/inventory_report_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/order_report/order_report_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/payout_report/payout_report_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/performance_score/performance_score_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/live_video/live_video_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/profile/profile_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/reports/reports_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/revenue_report/revenue_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/settings/settings_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/time_slot/time_slot_bloc.dart';
 import 'package:qrbani_vender_app/blocs/features/upcoming_orders/upcoming_orders_bloc.dart';
 
+import 'Core/repository/InventoryRepository.dart';
+import 'Core/repository/login_repository.dart';
+import 'Core/services/api_service.dart';
+import 'Screens/business_information/business_information_screen.dart';
+import 'Screens/business_information/repositories/business_information_repository.dart';
+import 'Screens/daily_report/daily_report_screen.dart';
+import 'Screens/daily_report/repository/report_repository.dart';
 import 'Screens/dashboard/dashboard_screen.dart';
 import 'Screens/inventory/inventory_screen.dart';
 import 'Screens/live_video/live_video_page.dart';
@@ -22,20 +38,29 @@ import 'Screens/payout/payout_screen.dart';
 import 'Screens/profile/profile_page.dart';
 import 'Screens/profile/repository/profile_repository.dart';
 import 'Screens/reports/reports_screen.dart';
+import 'Screens/request_payout/request_payout_page.dart';
+import 'Screens/revenue_report/repository/revenue_report_repository.dart';
 import 'Screens/support_help/widgets/support_help_screen.dart';
 import 'Screens/settings/settings_screen.dart';
+import 'Screens/tax_report/tax_report_screen.dart';
+import 'Screens/time_slot/AddTimeSlotPage.dart';
 import 'Screens/time_slot/time_slot_screen.dart';
 import 'Screens/transaction_history/transaction_history_page.dart';
+import 'blocs/features/Daily_Reports/daily_report_bloc.dart';
+import 'blocs/features/business_information/business_information_bloc.dart';
 import 'blocs/features/inventory/inventory_bloc.dart';
 import 'blocs/features/notifications/notification_bloc.dart';
 import 'blocs/features/orders/orders_bloc.dart';
 import 'blocs/features/payout/payout_bloc.dart';
+import 'blocs/features/review_payout/review_payout_bloc.dart';
+import 'blocs/features/review_payout/review_payout_event.dart';
 import 'blocs/features/splash/splash_bloc.dart';
 import 'blocs/features/login/login_bloc.dart';
 import 'blocs/features/register/register_bloc.dart';
 import 'blocs/features/dashboard/dashboard_bloc.dart';
 import 'blocs/features/bottom_nav/bottom_nav_bloc.dart';
 
+import 'blocs/features/tax_report/tax_report_bloc.dart';
 import 'screens/splash/splash_screen.dart';
 
 void main() {
@@ -55,7 +80,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider<LoginBloc>(
-          create: (_) => LoginBloc(),
+          create: (_) => LoginBloc(
+            LoginRepository(
+              ApiService(),
+            ),
+          ),
         ),
 
         BlocProvider<RegisterBloc>(
@@ -79,7 +108,9 @@ class MyApp extends StatelessWidget {
             create: (_) => AnimalVerificationBloc(),
         ),
         BlocProvider(
-          create: (_) => InventoryBloc(),
+          create: (_) => InventoryBloc( InventoryRepository(
+            ApiService(),
+          ),),
         ),
         BlocProvider(
           create: (_) => TimeSlotBloc(),
@@ -114,6 +145,51 @@ class MyApp extends StatelessWidget {
           create: (_) => LiveVideoBloc(),
           child: const LiveVideoPage(),
         ),
+        BlocProvider(
+          create: (_) => ReportBloc(
+            ReportRepository(),
+          ),
+          child: const ReportPage(),
+        ),
+        BlocProvider(
+          create: (_) => OrderReportBloc(),
+          child: const ReportPage(),
+        ),
+        BlocProvider(
+            create: (_) => StockReportBloc(
+                StockReportRepository(),
+            ),
+          child: const StockReportPage(),
+        ),
+        BlocProvider(
+          create: (_) => PayoutReportBloc(),
+          child: const PayoutReportScreen(),
+        ),
+        BlocProvider(
+          create: (_) => TaxReportBloc(),
+          child: const TaxReportScreen(),
+        ),
+        BlocProvider(
+          create: (_) => RevenueReportBloc(
+            repository: RevenueReportRepository(),
+          ),
+          child: const RevenueReportScreen(),
+        ),
+        BlocProvider(
+          create: (_) => PayoutBloc(),
+          child: RequestPayoutPage(),
+        ),
+        BlocProvider(
+          create: (_) => TimeSlotBloc(),
+          child: AddTimeSlotPage(),
+        ),
+        BlocProvider(
+          create: (_) => BusinessInformationBloc(
+            BusinessInformationRepository(),
+          ),
+          child: const BusinessInformationScreen(),
+        )
+
 
       ],
 

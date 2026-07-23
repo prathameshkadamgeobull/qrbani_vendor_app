@@ -30,4 +30,21 @@ class AppColors {
   static const red = Colors.red;
   static const lightGrey = Color(0xffF5F5F5);
 
+  static const Color completed = Color(0xFF0E8F5B);
+
+  static const Color inProgress = Color(0xFF5B8DEF);
+
+  static const Color pending = Color(0xFFF5A623);
+
+  static const Color cancelled = Color(0xFFE74C3C);
+
+
+
+  static const Color grey = Color(0xFF8E8E8E);
+
+
+  static const Color border = Color(0xFFE8E8E8);
+
+  static const Color cardShadow = Color(0x14000000);
+
 }

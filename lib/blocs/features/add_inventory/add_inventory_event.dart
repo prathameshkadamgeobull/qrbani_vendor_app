@@ -25,17 +25,19 @@ class AnimalTypeChanged extends AddInventoryEvent {
 /// Save Inventory
 class SaveInventory extends AddInventoryEvent {
   final String animalType;
+  final String breed;
+  final String age;
   final String quantity;
-  final String minWeight;
-  final String maxWeight;
+  final String totalWeight;
   final String price;
   final String notes;
 
   const SaveInventory({
     required this.animalType,
+    required this.breed,
+    required this.age,
     required this.quantity,
-    required this.minWeight,
-    required this.maxWeight,
+    required this.totalWeight,
     required this.price,
     required this.notes,
   });
@@ -44,9 +46,13 @@ class SaveInventory extends AddInventoryEvent {
   List<Object?> get props => [
     animalType,
     quantity,
-    minWeight,
-    maxWeight,
+    totalWeight,
     price,
     notes,
   ];
+}
+class BreedChanged extends AddInventoryEvent {
+  final String breed;
+
+  const BreedChanged(this.breed);
 }

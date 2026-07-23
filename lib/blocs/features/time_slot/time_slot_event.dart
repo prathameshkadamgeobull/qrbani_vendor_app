@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../models/time_slot_model.dart';
+
 abstract class TimeSlotEvent extends Equatable {
   const TimeSlotEvent();
 
@@ -14,17 +16,16 @@ class LoadTimeSlots extends TimeSlotEvent {
 
 /// Add New Time Slot
 class AddTimeSlot extends TimeSlotEvent {
-  final String time;
-  final int capacity;
+  final TimeSlotModel slot;
+
 
   const AddTimeSlot({
-    required this.time,
-    required this.capacity,
+    required this.slot,
   });
+
 
   @override
   List<Object?> get props => [
-    time,
-    capacity,
+    slot,
   ];
 }

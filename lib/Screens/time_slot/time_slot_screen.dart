@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hijri/hijri_calendar.dart';
+import 'package:qrbani_vender_app/Screens/time_slot/widgets/hijri_date_widget.dart';
 
 import '../../Core/constants/app_text_style.dart';
 import '../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
@@ -20,13 +22,29 @@ class TimeSlotScreen extends StatefulWidget {
 }
 
 class _TimeSlotScreenState extends State<TimeSlotScreen> {
+
+
+  String getTodayHijriDate() {
+
+    HijriCalendar.setLocal("en");
+
+    final hijri = HijriCalendar.now();
+
+
+    return "${hijri.hDay} ${hijri.longMonthName} ${hijri.hYear}";
+
+  }
   @override
   void initState() {
     super.initState();
 
-    context.read<TimeSlotBloc>().add(
-      const LoadTimeSlots(),
-    );
+    if(context.read<TimeSlotBloc>().state.timeSlots.isEmpty){
+
+      context.read<TimeSlotBloc>().add(
+        const LoadTimeSlots(),
+      );
+
+    }
   }
 
   @override
@@ -97,11 +115,11 @@ class _TimeSlotScreenState extends State<TimeSlotScreen> {
 
                 const SizedBox(height: 10),
 
-                const Text(
-                  "10 Dhul-Hijjah 1446",
-                  style: AppTextStyles.bodySemiBold,
+                HijriDateWidget(
+                  date: state.selectedDate.isEmpty
+                      ? getTodayHijriDate()
+                      : state.selectedDate,
                 ),
-
                 const SizedBox(height: 18),
 
                 Expanded(

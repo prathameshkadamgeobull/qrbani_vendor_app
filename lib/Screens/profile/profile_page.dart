@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrbani_vender_app/Screens/profile/widgets/EditProfilePage.dart';
 
 import '../../blocs/features/profile/profile_bloc.dart';
 import '../../blocs/features/profile/profile_event.dart';
 import '../../blocs/features/profile/profile_state.dart';
 import '../../core/constants/app_text_style.dart';
+import '../../models/ProfileUpdateModel.dart';
 import 'widgets/edit_profile_button.dart';
 import 'widgets/profile_info_card.dart';
 
@@ -16,6 +20,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+
+  ProfileUpdateModel? updatedProfile;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
         iconTheme: const IconThemeData(color: Colors.black),
       ),
 
+
       body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
           if (state is ProfileLoading) {
@@ -59,19 +68,26 @@ class _ProfilePageState extends State<ProfilePage> {
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.grey.shade200,
-                      backgroundImage: AssetImage(
+                      backgroundImage:
+
+                      updatedProfile?.imagePath != null
+
+                          ? FileImage(
+                        File(updatedProfile!.imagePath!),
+                      )
+
+                          : const AssetImage(
                         "assets/images/profile.png",
-                      ),
+                      ) as ImageProvider,
                     ),
 
                     const SizedBox(height: 16),
 
                     Text(
-                      profile.name,
+                      updatedProfile?.name ?? profile.name,
                       textAlign: TextAlign.center,
                       style: AppTextStyles.screenTitle,
                     ),
-
                     const SizedBox(height: 6),
 
                     Text(
@@ -84,9 +100,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     Expanded(
                       child: SingleChildScrollView(
                         child: ProfileInfoCard(
-                          phone: profile.phone,
-                          email: profile.email,
-                          location: profile.location,
+                          phone: updatedProfile?.phone ?? profile.phone,
+                          email: updatedProfile?.email ?? profile.email,
+                          location: updatedProfile?.location ?? profile.location,
                         ),
                       ),
                     ),
@@ -94,7 +110,27 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 20),
 
                     EditProfileButton(
-                      onPressed: () {},
+                      onPressed: () async {
+
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EditProfilePage(),
+                          ),
+                        );
+
+
+                        if(result != null){
+
+                          setState(() {
+
+                            updatedProfile = result;
+
+                          });
+
+                        }
+
+                      },
                     ),
 
                     const SizedBox(height: 20),

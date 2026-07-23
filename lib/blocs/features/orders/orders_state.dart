@@ -25,6 +25,7 @@ class OrdersState extends Equatable {
     this.expandedOrderNo = "",
   });
 
+
   OrdersState copyWith({
     bool? isLoading,
     List<OrderModel>? allOrders,
@@ -52,4 +53,5 @@ class OrdersState extends Equatable {
     hijriDate,
     expandedOrderNo,
   ];
+
 }

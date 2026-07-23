@@ -28,4 +28,7 @@ class AppFontSizes {
 
   // Extra Large
   static const double s36 = 36;
+  static const double bodyLarge = 16;
+  static const double bodyMedium = 14;
+  static const double bodySmall = 12;
 }

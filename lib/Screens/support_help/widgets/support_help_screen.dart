@@ -3,9 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../Core/constants/app_colors.dart';
 import '../../../Core/constants/app_text_style.dart';
+import '../../../blocs/features/faq/faq_bloc.dart';
+import '../../../blocs/features/faq/faq_event.dart';
+import '../../../blocs/features/how_to_use/how_to_use_bloc.dart';
+import '../../../blocs/features/how_to_use/how_to_use_event.dart';
 import '../../../blocs/features/support_help/support_help_bloc.dart';
 import '../../../blocs/features/support_help/support_help_event.dart';
 import '../../../blocs/features/support_help/support_help_state.dart';
+import '../../../utils/email_launcher.dart';
+import '../../contact_support/contact_support_page.dart';
+import '../../contact_support/widgets/contact_bottom_sheet.dart';
+import '../../faq/faq_screen.dart';
+import '../../how_to_use/how_to_use_screen.dart';
 
 class SupportHelpPage extends StatelessWidget {
   const SupportHelpPage({super.key});
@@ -40,7 +49,80 @@ class _SupportHelpView extends StatelessWidget {
         ),
       ),
 
-      body: BlocBuilder<SupportHelpBloc, SupportHelpState>(
+      body: BlocConsumer<SupportHelpBloc, SupportHelpState>(
+        listener: (context, state) async {
+          if (state.navigateIndex == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    BlocProvider(
+                      create: (_) =>
+                      FaqBloc()
+                        ..add(LoadFaqs()),
+                      child: const FaqScreen(),
+                    ),
+              ),
+            );
+
+            context.read<SupportHelpBloc>().add(
+               SupportItemTapped(-1),
+            );
+          }
+          if (state.navigateIndex == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider(
+                  create: (_) => HowToUseBloc()
+                    ..add(LoadGuideSteps()),
+                  child: const HowToUseScreen(),
+                ),
+              ),
+            );
+
+            context.read<SupportHelpBloc>().add(
+              SupportItemTapped(-1),
+            );
+          }
+          if (state.navigateIndex == 2) {
+
+            showModalBottomSheet(
+
+              context: context,
+
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+
+
+              builder: (_) {
+
+                return const ContactBottomSheet();
+
+              },
+
+            );
+
+            context.read<SupportHelpBloc>().add(
+              SupportItemTapped(-1),
+            );
+
+          }
+
+          if (state.navigateIndex == 3) {
+            debugPrint("Email button clicked");
+
+            await EmailLauncher.sendEmail();
+
+            context.read<SupportHelpBloc>().add(
+              SupportItemTapped(-1),
+            );
+          }
+        },
+
         builder: (context, state) {
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -56,9 +138,9 @@ class _SupportHelpView extends StatelessWidget {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(14),
                       onTap: () {
-                        context
-                            .read<SupportHelpBloc>()
-                            .add(SupportItemTapped(index));
+                        context.read<SupportHelpBloc>().add(
+                          SupportItemTapped(index),
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -74,14 +156,11 @@ class _SupportHelpView extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-
                             CircleAvatar(
                               radius: 20,
-                              backgroundColor:
-                              Colors.grey.shade100,
+                              backgroundColor: Colors.grey.shade100,
                               child: Icon(
                                 item.icon,
-                                size: 22,
                                 color: Colors.black87,
                               ),
                             ),
@@ -93,30 +172,21 @@ class _SupportHelpView extends StatelessWidget {
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: [
-
                                   Text(
                                     item.title,
                                     style: AppTextStyles.cardTitle,
                                   ),
 
                                   if (item.subtitle != null)
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 3),
-                                      child: Text(
-                                        item.subtitle!,
-                                        style:
-                                        AppTextStyles.cardSubtitle,
-                                      ),
+                                    Text(
+                                      item.subtitle!,
+                                      style: AppTextStyles.cardSubtitle,
                                     ),
                                 ],
                               ),
                             ),
 
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Colors.black54,
-                            ),
+                            const Icon(Icons.chevron_right),
                           ],
                         ),
                       ),
@@ -124,40 +194,51 @@ class _SupportHelpView extends StatelessWidget {
                   );
                 },
               ),
-
-              const SizedBox(height: 30),
             ],
           );
         },
       ),
 
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            height: 52,
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                context
-                    .read<SupportHelpBloc>()
-                    .add(CallSupport());
-              },
-              child: const Text(
-                "Call Support",
-                style: AppTextStyles.button,
-              ),
+        bottomNavigationBar:
+    SafeArea( child:
+    Padding( padding: const EdgeInsets.all(16),
+    child: SizedBox( height: 52,
+    width: double.infinity,
+    child: ElevatedButton( style: ElevatedButton.styleFrom(
+    backgroundColor: AppColors.primary,
+    foregroundColor: AppColors.white,
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10),
+    ),
+    ),
+      onPressed: () {
+
+        showModalBottomSheet(
+          context: context,
+
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
             ),
           ),
+
+          builder: (context) {
+
+            return const ContactBottomSheet();
+
+          },
+
+        );
+
+      },
+      child: const Text( "Call Support",
+    style: AppTextStyles.button,
         ),
-      ),
+        ),
+        ),
+        ),
+    ),
     );
   }
+
 }

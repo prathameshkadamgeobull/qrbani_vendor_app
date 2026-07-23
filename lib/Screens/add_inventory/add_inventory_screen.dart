@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../Core/constants/app_text_style.dart';
@@ -22,10 +23,10 @@ class AddInventoryScreen extends StatefulWidget {
 class _AddInventoryScreenState extends State<AddInventoryScreen> {
 
   final quantityController = TextEditingController();
-  final minWeightController = TextEditingController();
-  final maxWeightController = TextEditingController();
+  final totalWeightController = TextEditingController();
   final priceController = TextEditingController();
   final notesController = TextEditingController();
+  final ageController = TextEditingController();
 
   @override
   void initState() {
@@ -39,10 +40,10 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
   @override
   void dispose() {
     quantityController.dispose();
-    minWeightController.dispose();
-    maxWeightController.dispose();
+    totalWeightController.dispose();
     priceController.dispose();
     notesController.dispose();
+    ageController.dispose();
     super.dispose();
   }
 
@@ -104,6 +105,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                       label: "Animal Type",
                       value: state.selectedAnimal,
                       items: state.animalTypes,
+                      isRequired: true,
                       onChanged: (value) {
                         context.read<AddInventoryBloc>().add(
                           AnimalTypeChanged(value!),
@@ -113,47 +115,46 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
 
                     const SizedBox(height: 20),
 
+                    CustomDropdown(
+                      label: "Breed",
+                      value: state.selectedBreed,
+                      items: state.breeds,
+                      isRequired: true,
+                      onChanged: (value) {
+                        context.read<AddInventoryBloc>().add(
+                          BreedChanged(value!),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    CustomTextField(
+                      label: "Age (Months)",
+                      hint: "Enter age",
+                      controller: ageController,
+                      keyboardType: TextInputType.number,
+                      isRequired: true,
+                    ),
+                    const SizedBox(height: 20),
                     /// Quantity
                     CustomTextField(
                       label: "Total Quantity",
                       hint: "Enter quantity",
                       controller: quantityController,
                       keyboardType: TextInputType.number,
+                      isRequired: true,
+
                     ),
 
                     const SizedBox(height: 20),
 
                     /// Weight Range
-                    Text(
-                      "Weight Range (KG)",
-                      style: AppTextStyles.bodyMedium,
-                    ),
-
-                   const SizedBox(height: 8),
-
-                    Row(
-                      children: [
-
-                        Expanded(
-                          child: CustomTextField(
-                            label: "",
-                            hint: "Min",
-                            controller: minWeightController,
-                            keyboardType: TextInputType.number,
-                          ),
-                        ),
-
-                        const SizedBox(width: 15),
-
-                        Expanded(
-                          child: CustomTextField(
-                            label: "",
-                            hint: "Max",
-                            controller: maxWeightController,
-                            keyboardType: TextInputType.number,
-                          ),
-                        ),
-                      ],
+                    CustomTextField(
+                      label: "Total Weight (KG)",
+                      hint: "Enter total weight",
+                      controller: totalWeightController,
+                      keyboardType: TextInputType.number,
+                      isRequired: true,
                     ),
 
                     const SizedBox(height: 20),
@@ -163,7 +164,14 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                       label: "Price Per Unit (SAR)",
                       hint: "Enter price",
                       controller: priceController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      isRequired: true,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'[0-9,.]'),
+                        ),
+                      ],
+
                     ),
 
                     const SizedBox(height: 20),
@@ -185,23 +193,35 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                     else
                       SaveInventoryButton(
                         onPressed: () {
+                          if (state.selectedAnimal == null ||
+                              state.selectedBreed == null ||
+                              ageController.text.trim().isEmpty ||
+                              quantityController.text.trim().isEmpty ||
+                              totalWeightController.text.trim().isEmpty ||
+                              priceController.text.trim().isEmpty){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Please fill all mandatory fields."),
+                              ),
+                            );
+                            return;
+                          }
 
-                          // Save form
                           context.read<AddInventoryBloc>().add(
-                            SaveInventory(
-                              animalType: state.selectedAnimal ?? "",
-                              quantity: quantityController.text,
-                              minWeight: minWeightController.text,
-                              maxWeight: maxWeightController.text,
-                              price: priceController.text,
-                              notes: notesController.text,
-                            ),
+                              SaveInventory(
+                                animalType: state.selectedAnimal!,
+                                breed: state.selectedBreed!,
+                                age: ageController.text,
+                                quantity: quantityController.text,
+                                totalWeight: totalWeightController.text,
+                                price: priceController.text,
+                                notes: notesController.text,
+                              )
                           );
 
-                          // Update inventory list
                           context.read<InventoryBloc>().add(
                             AddInventory(
-                              animalName: state.selectedAnimal ?? "",
+                              animalName: state.selectedAnimal!,
                               quantity: int.tryParse(quantityController.text) ?? 0,
                             ),
                           );

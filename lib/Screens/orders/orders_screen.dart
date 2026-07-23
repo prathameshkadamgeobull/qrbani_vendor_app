@@ -16,19 +16,30 @@ import 'widgets/order_card.dart';
 import 'widgets/orders_header.dart';
 
 class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({super.key});
+  final String initialStatus;
+  const OrdersScreen({
+    super.key,
+    this.initialStatus = "All",
+  });
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+  late String selectedStatus;
+  bool autoAccept = false;
+
   @override
   void initState() {
     super.initState();
-
+    selectedStatus = widget.initialStatus;
+    context.read<OrdersBloc>().add(LoadOrders());
+    context.read<BottomNavBloc>().add(ChangeTabEvent(1));
     context.read<OrdersBloc>().add(
-      LoadOrders(),
+      LoadOrders(
+        initialStatus: widget.initialStatus,
+      ),
     );
 
     context.read<BottomNavBloc>().add(
@@ -77,6 +88,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
               OrdersHeader(
                 hijriDate: state.hijriDate,
                 selectedStatus: state.selectedStatus,
+               autoAccept: autoAccept,
+                 onAutoAcceptChanged: (value) {
+                   setState(() {
+                     autoAccept = value;
+                   });
+                 },
+
 
                 goatCount: goatCount,
                 sheepCount: sheepCount,

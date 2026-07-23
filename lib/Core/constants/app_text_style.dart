@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 import 'app_font_size.dart';
 
 class AppTextStyles {
@@ -383,5 +384,46 @@ class AppTextStyles {
   static const TextStyle grey14 = TextStyle(
     fontSize: 14,
     color: Colors.grey,
+  );
+
+
+  static const TextStyle title = TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: AppColors.black,
+  );
+
+  static const TextStyle cardTitle1 = TextStyle(
+    fontSize: 13,
+    color: AppColors.grey,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const TextStyle cardValue = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: AppColors.black,
+  );
+
+  static const TextStyle sectionTitle1 = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: AppColors.black,
+  );
+
+  static const TextStyle orderId = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: AppColors.black,
+  );
+
+  static final TextStyle orderDate1 = TextStyle(
+    fontSize: 13,
+    color: AppColors.grey,
+  );
+
+  static const TextStyle status = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
   );
 }

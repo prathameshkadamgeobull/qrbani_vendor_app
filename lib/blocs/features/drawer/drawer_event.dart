@@ -5,3 +5,11 @@ class ChangeDrawerItem extends DrawerEvent {
 
   ChangeDrawerItem(this.index);
 }
+
+// abstract class DrawerEvent {}
+//
+// class SelectDrawerMenu extends DrawerEvent {
+//   final int index;
+//
+//   SelectDrawerMenu(this.index);
+// }

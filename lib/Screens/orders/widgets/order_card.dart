@@ -527,9 +527,12 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../Core/constants/app_text_style.dart';
+import '../../../blocs/features/orders/orders_bloc.dart';
+import '../../../blocs/features/orders/orders_event.dart';
 import '../../animal_verification/animal_verification_screen.dart';
 
 class OrderCard extends StatefulWidget {
@@ -915,11 +918,13 @@ class _OrderCardState extends State<OrderCard> {
               child: SizedBox(
                 height: 48,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      isExpanded = false;
+                    });
+                  },
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(
-                      color: Colors.red,
-                    ),
+                    side: const BorderSide(color: Colors.red),
                     foregroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),

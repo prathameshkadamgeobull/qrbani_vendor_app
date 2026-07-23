@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../Core/constants/app_text_style.dart';
 
@@ -8,6 +9,9 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final int maxLines;
+  final bool isRequired;
+  final List<TextInputFormatter>? inputFormatters;
+
 
   const CustomTextField({
     super.key,
@@ -16,6 +20,10 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
+    this.isRequired = false,
+    this.inputFormatters,
+
+
   });
 
   @override
@@ -26,9 +34,20 @@ class CustomTextField extends StatelessWidget {
         children: [
 
           if (label.isNotEmpty) ...[
-            Text(
-              label,
-              style: AppTextStyles.bodyMedium,
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: label,
+                    style: AppTextStyles.bodyMedium,
+                  ),
+                  if (isRequired)
+                    const TextSpan(
+                      text: " *",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
           ],
@@ -38,6 +57,8 @@ class CustomTextField extends StatelessWidget {
             keyboardType: keyboardType,
             maxLines: maxLines,
             style: AppTextStyles.body,
+            inputFormatters: inputFormatters,
+
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: AppTextStyles.caption,

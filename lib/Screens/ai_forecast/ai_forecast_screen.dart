@@ -64,7 +64,7 @@ class _AiForecastScreenState extends State<AiForecastScreen> {
                     selectedAnimal: forecast.animal,
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
 
                   Text(
                     forecast.demand,
@@ -83,7 +83,7 @@ class _AiForecastScreenState extends State<AiForecastScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
 
                   ForecastChart(
                     low: forecast.low,
@@ -95,7 +95,7 @@ class _AiForecastScreenState extends State<AiForecastScreen> {
 
                   const LegendWidget(),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
 
                   RecommendationCard(
                     recommendation: forecast.recommendation,

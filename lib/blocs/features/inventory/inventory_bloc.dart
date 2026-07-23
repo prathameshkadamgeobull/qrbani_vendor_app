@@ -1,11 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../Core/repository/InventoryRepository.dart';
 import '../../../models/inventory_model.dart';
 import 'inventory_event.dart';
 import 'inventory_state.dart';
 
 class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
-  InventoryBloc() : super(const InventoryState()) {
+
+  final InventoryRepository repository;
+
+  InventoryBloc(this.repository
+      ):super(const InventoryState())
+  {
+
+
     on<LoadInventory>(_loadInventory);
     on<AddInventory>(_addInventory);
   }
@@ -14,43 +22,38 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
       LoadInventory event,
       Emitter<InventoryState> emit,
       ) async {
-    emit(
-      state.copyWith(
-        isLoading: true,
-      ),
-    );
 
-    await Future.delayed(
-      const Duration(milliseconds: 700),
-    );
-
-    final inventories = [
-      const InventoryModel(
-        animalName: "Goat",
-        image: "assets/images/goat.jpg",
-        available: 230,
-        reserved: 45,
-      ),
-      const InventoryModel(
-        animalName: "Sheep",
-        image: "assets/images/sheep.jpg",
-        available: 120,
-        reserved: 20,
-      ),
-      const InventoryModel(
-        animalName: "Camel",
-        image: "assets/images/camelnew.jpg",
-        available: 80,
-        reserved: 15,
-      ),
-    ];
 
     emit(
-      state.copyWith(
-        isLoading: false,
-        inventories: inventories,
-      ),
-    );
+        state.copyWith(
+            isLoading:true
+        ));
+
+
+    try{
+
+      final inventories =
+      await repository.getInventory();
+
+
+      emit(
+          state.copyWith(
+            isLoading:false,
+            inventories:inventories,
+          )
+      );
+
+
+    }catch(e){
+
+      emit(
+          state.copyWith(
+            isLoading:false,
+          )
+      );
+
+    }
+
   }
 
   void _addInventory(

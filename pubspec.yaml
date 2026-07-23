@@ -38,11 +38,23 @@ dependencies:
   qr_flutter: ^4.1.0
   fl_chart: ^0.68.0
   permission_handler: ^11.3.1
+  syncfusion_flutter_gauges: ^30.2.7
+  syncfusion_flutter_datepicker: ^30.2.7
+  pdf: ^3.10.8
+  path_provider: ^2.1.4
+  share_plus: ^10.0.2
+  open_filex: ^4.5.0
+  file_picker: ^10.3.2
+  url_launcher: ^6.3.1
+  hijri: ^3.0.0
 #<<<<<<< HEAD
-  syncfusion_flutter_gauges: ^29.2.11
-#=======
+
+  #=======
   image_picker: ^1.1.2
   camera: ^0.11.0+2
+  intl_phone_field: ^3.2.0
+  pinput: ^5.0.0
+  dio: ^5.4.3
 #>>>>>>> 61dfed5 (profile,barcode,live_video screens)
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

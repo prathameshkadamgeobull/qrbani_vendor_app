@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrbani_vender_app/Screens/inventory_report/inventory_report_screen.dart';
+import 'package:qrbani_vender_app/Screens/order_report/order_report_screen.dart';
+import 'package:qrbani_vender_app/Screens/payout_report/payout_report_screen.dart';
+import 'package:qrbani_vender_app/Screens/tax_report/tax_report_screen.dart';
 
 import '../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
 import '../../blocs/features/bottom_nav/bottom_nav_event.dart';
 import '../../blocs/features/reports/reports_bloc.dart';
 import '../../blocs/features/reports/reports_event.dart';
 import '../../blocs/features/reports/reports_state.dart';
+import '../daily_report/daily_report_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../dashboard/widgets/custom_bottom_nav.dart';
+import '../revenue_report/revenue_screen.dart';
 import 'widgets/custom_report_button.dart';
 import 'widgets/report_item.dart';
 
@@ -50,14 +56,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black, // Makes back arrow and title black
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const DashboardScreen(),
-              ),
+            context.read<BottomNavBloc>().add(
+              ChangeTabEvent(0),
             );
+
+            Navigator.pop(context);
           },
         ),
         title: const Text("Reports"),
@@ -83,18 +88,71 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           title: report.title,
                           icon: report.icon,
                           onTap: () {
+
                             context.read<ReportsBloc>().add(
                               ReportClicked(report.title),
                             );
+
+                            if (report.title == "Daily Report") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ReportPage(),
+                                ),
+                              );
+                            }
+                            if (report.title == "Orders Report") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OrderReportScreen(),
+                                ),
+                              );
+                            }
+                            if (report.title == "Inventory Report") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const StockReportPage(),
+                                ),
+                              );
+                            }
+                            if (report.title == "Revenue Report") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RevenueReportScreen(),
+                                ),
+                              );
+                            }
+
+
+                            if (report.title == "Payout Report") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PayoutReportScreen(),
+                                ),
+                              );
+                            }
+                            if (report.title == "Tax Report") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TaxReportScreen(),
+                                ),
+                              );
+                            }
+
                           },
                         );
                       },
                     ),
                   ),
                   SizedBox(height: 30),
-                  CustomReportButton(
-                    onPressed: () {},
-                  ),
+                  // CustomReportButton(
+                  //   onPressed: () {},
+                  // ),
 
                 ],
               );
@@ -107,6 +165,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ),
       ),
       bottomNavigationBar: const CustomBottomNavigation(),
+
       ),
     );
   }

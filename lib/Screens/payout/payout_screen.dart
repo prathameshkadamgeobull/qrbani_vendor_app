@@ -8,6 +8,9 @@ import 'package:qrbani_vender_app/Screens/payout/widgets/payout_history_button.d
 import '../../blocs/features/payout/payout_bloc.dart';
 import '../../blocs/features/payout/payout_event.dart';
 import '../../blocs/features/payout/payout_state.dart';
+import '../dashboard/dashboard_screen.dart';
+import '../dashboard/widgets/custom_bottom_nav.dart';
+import '../request_payout/request_payout_page.dart';
 import '../transaction_history/transaction_history_page.dart';
 
 class PayoutScreen extends StatefulWidget {
@@ -22,7 +25,12 @@ class _PayoutScreenState extends State<PayoutScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<PayoutBloc>().add(LoadPayout());
+
+    final bloc = context.read<PayoutBloc>();
+
+    if (bloc.state.payout == null) {
+      bloc.add(LoadPayout());
+    }
   }
 
   @override
@@ -30,18 +38,18 @@ class _PayoutScreenState extends State<PayoutScreen> {
     return Scaffold(
       backgroundColor: const Color(0xffF8F8F8),
 
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        title: const Text(
-          "Payouts / Settlement",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   centerTitle: true,
+      //   backgroundColor: Colors.white,
+      //   title: const Text(
+      //     "Payouts / Settlement",
+      //     style: TextStyle(
+      //       color: Colors.black,
+      //       fontWeight: FontWeight.w600,
+      //     ),
+      //   ),
+      // ),
 
       // 👇 HERE is where your BlocBuilder goes
       body: BlocBuilder<PayoutBloc, PayoutState>(
@@ -56,53 +64,115 @@ class _PayoutScreenState extends State<PayoutScreen> {
             return Center(child: Text(state.error!));
           }
 
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  // Scrollable content
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          AvailableBalanceCard(
-                            balance: payout?.availableBalance ?? "",
-                            onRequestPayout: () {
-                              context.read<PayoutBloc>().add(RequestPayout());
-                            },
-                          ),
+          return Scaffold(
+            backgroundColor: const Color(0xffF8F8F8),
 
-                          const SizedBox(height: 16),
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: true,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    // Navigator.pushReplacementNamed(context, '/dashboard');
 
-                          PayoutDetailCard(
-                            nextPayout: payout?.nextPayout ?? "",
-                            payoutMethod: payout?.payoutMethod ?? "",
-                            bankName: payout?.bankName ?? "",
-                            accountNumber: payout?.accountNumber ?? "",
-                          ),
-                        ],
+                    // OR if you use a DashboardScreen widget:
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const DashboardScreen(),
                       ),
+                    );
+                  },
+                ),
+                title: const Text(
+                  "Payouts / Settlement",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+            body: BlocBuilder<PayoutBloc, PayoutState>(
+              builder: (context, state) {
+                final payout = state.payout;
+
+                if (state.isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (state.error != null) {
+                  return Center(
+                    child: Text(state.error!),
+                  );
+                }
+
+                return SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                AvailableBalanceCard(
+                                  balance: "SAR ${(payout?.availableBalance ?? "0")
+                                      .replaceAll("SAR", "")
+                                      .trim()}",
+                                  onRequestPayout: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const RequestPayoutPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
+
+
+
+                                const SizedBox(height: 16),
+
+                                PayoutDetailCard(
+                                  nextPayout: payout?.nextPayout ?? "",
+                                  payoutMethod: payout?.payoutMethod ?? "",
+                                  bankName: payout?.bankName ?? "",
+                                  accountNumber: payout?.accountNumber ?? "",
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        PayoutHistoryButton(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const TransactionHistoryPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // Fixed button
-                  PayoutHistoryButton(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const TransactionHistoryPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                );
+              },
             ),
+
+            bottomNavigationBar: const CustomBottomNavigation(),
           );
+
         },
       ),
     );

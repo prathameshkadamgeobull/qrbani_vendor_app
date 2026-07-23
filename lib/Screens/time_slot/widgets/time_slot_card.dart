@@ -11,7 +11,12 @@ class TimeSlotCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double percent = (slot.booked / slot.capacity).clamp(0.0, 1.0);
+    final int safeBooked =
+    slot.booked > slot.capacity ? slot.capacity : slot.booked;
+
+    final double percent = slot.capacity == 0
+        ? 0
+        : (safeBooked / slot.capacity).clamp(0.0, 1.0);
 
     Color barColor;
 
@@ -95,9 +100,9 @@ class TimeSlotCard extends StatelessWidget {
                   /// Center Text
                   Center(
                     child: Text(
-                      slot.booked >= slot.capacity
-                          ? "${slot.booked}/${slot.capacity} Full"
-                          : "${slot.booked}/${slot.capacity} Booked",
+                      safeBooked >= slot.capacity
+                          ? "$safeBooked/${slot.capacity} Full"
+                          : "$safeBooked/${slot.capacity} Booked",
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 10,

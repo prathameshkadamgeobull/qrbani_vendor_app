@@ -8,7 +8,16 @@ abstract class OrdersEvent extends Equatable {
 }
 
 /// Load Orders
-class LoadOrders extends OrdersEvent {}
+class LoadOrders extends OrdersEvent {
+  final String initialStatus;
+
+  const LoadOrders({
+    this.initialStatus = "All",
+  });
+
+  @override
+  List<Object?> get props => [initialStatus];
+}
 
 /// Refresh Orders
 class RefreshOrders extends OrdersEvent {}

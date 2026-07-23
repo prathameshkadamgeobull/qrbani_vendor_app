@@ -7,6 +7,7 @@ class CustomDropdown extends StatelessWidget {
   final String? value;
   final List<String> items;
   final ValueChanged<String?> onChanged;
+  final bool isRequired;
 
   const CustomDropdown({
     super.key,
@@ -14,6 +15,8 @@ class CustomDropdown extends StatelessWidget {
     required this.value,
     required this.items,
     required this.onChanged,
+    this.isRequired = false,
+
   });
 
   @override
@@ -22,9 +25,20 @@ class CustomDropdown extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
-        Text(
-          label,
-          style: AppTextStyles.bodyMedium,
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: label,
+                style: AppTextStyles.bodyMedium,
+              ),
+              if (isRequired)
+                const TextSpan(
+                  text: " *",
+                  style: TextStyle(color: Colors.red),
+                ),
+            ],
+          ),
         ),
 
         const SizedBox(height: 8),

@@ -73,13 +73,23 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       ),
     ];
 
+    List<OrderModel> filtered;
+
+    if (event.initialStatus == "All") {
+      filtered = orders;
+    } else {
+      filtered = orders.where((order) {
+        return order.status == event.initialStatus;
+      }).toList();
+    }
+
     emit(
       state.copyWith(
         isLoading: false,
         hijriDate: "10 Dhul-Hijjah 1446",
         allOrders: orders,
-        filteredOrders: orders,
-        selectedStatus: "All",
+        filteredOrders: filtered,
+        selectedStatus: event.initialStatus,
       ),
     );
   }
@@ -105,7 +115,11 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       RefreshOrders event,
       Emitter<OrdersState> emit,
       ) async {
-    add(LoadOrders());
+    add(
+      LoadOrders(
+        initialStatus: state.selectedStatus,
+      ),
+    );
   }
 
   void _changeStatus(

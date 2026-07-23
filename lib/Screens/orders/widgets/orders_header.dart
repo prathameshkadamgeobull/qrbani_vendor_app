@@ -193,10 +193,13 @@
     final VoidCallback onBack;
     final VoidCallback onNotification;
     final VoidCallback onUpcoming;
+    final bool autoAccept;
+    final ValueChanged<bool> onAutoAcceptChanged;
 
     final int goatCount;
     final int sheepCount;
     final int camelCount;
+    final int initialTab;
 
     const OrdersHeader({
       super.key,
@@ -209,6 +212,9 @@
       required this.goatCount,
       required this.sheepCount,
       required this.camelCount,
+      required this.autoAccept,
+      required this.onAutoAcceptChanged,
+      this.initialTab = 0,
     });
 
     @override
@@ -222,7 +228,7 @@
       "In Progress",
       "Completed",
     ];
-
+    bool autoAccept = false;
     @override
     Widget build(BuildContext context) {
       return SafeArea(
@@ -269,31 +275,37 @@
 
                     const Spacer(),
 
-                    InkWell(
-                      onTap: widget.onNotification,
-                      borderRadius: BorderRadius.circular(20),
-                      child: Stack(
-                        children: [
-
-                          const Icon(
-                            Icons.filter_list,
-                            size: 24,
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "Auto Accept",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff444444),
                           ),
+                        ),
+                        const SizedBox(width: 4),
+                        Transform.scale(
+                          scale: 0.75, // Try 0.7, 0.75, or 0.8
+                          child: Switch(
+                            value: autoAccept,
+                            activeColor: Colors.white,
+                            activeTrackColor: const Color(0xff0B8A47),
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey.shade300,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            onChanged: (value) {
+                              setState(() {
+                                autoAccept = value;
+                              });
 
-                          Positioned(
-                            top: 2,
-                            right: 2,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.orange,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
+                              widget.onAutoAcceptChanged(value);
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

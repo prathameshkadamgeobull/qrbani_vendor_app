@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrbani_vender_app/blocs/features/revenue_report/revenue_bloc.dart';
 
 import '../../blocs/features/ai_forecast/ai_forecast_bloc.dart';
 import '../../blocs/features/ai_forecast/ai_forecast_event.dart';
@@ -10,14 +11,14 @@ import '../../blocs/features/dashboard/dashboard_event.dart';
 import '../../blocs/features/dashboard/dasboard_state.dart';
 import '../../blocs/features/performance_score/performance_score_bloc.dart';
 import '../../blocs/features/performance_score/performance_score_event.dart';
-import '../../blocs/features/revenue/revenue_bloc.dart';
-import '../../blocs/features/revenue/revenue_event.dart';
 
+import '../../blocs/features/revenue_report/revenue_event.dart';
 import '../ai_forecast/ai_forecast_screen.dart';
 import '../drawer/widgets/custom_drawer.dart';
 import '../performance_score/widgets/performance_score_screen.dart';
-import '../revenue/revenue_screen.dart';
 
+import '../revenue_report/repository/revenue_report_repository.dart';
+import '../revenue_report/revenue_screen.dart';
 import 'widgets/ai_forecast_card.dart';
 import 'widgets/custom_bottom_nav.dart';
 import 'widgets/dashboard_header.dart';
@@ -88,11 +89,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (_) => BlocProvider(
-                                  create: (_) => RevenueBloc()
-                                    ..add(
-                                      const LoadRevenue(),
-                                    ),
-                                  child: const RevenueScreen(),
+                                  create: (_) => RevenueReportBloc(
+                                    repository: RevenueReportRepository(),
+                                  )..add(
+                                    const LoadRevenueReport(),
+                                  ),
+                                  child: const RevenueReportScreen(),
                                 ),
                               ),
                             );

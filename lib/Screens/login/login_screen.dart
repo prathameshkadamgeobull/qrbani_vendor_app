@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:pinput/pinput.dart';
+
 import 'package:qrbani_vender_app/Screens/dashboard/dashboard_screen.dart';
 import 'package:qrbani_vender_app/Screens/register/register_screen.dart';
 
@@ -15,166 +18,98 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final phoneController = TextEditingController();
-  final otpController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
+  bool isPhoneValid = false;
+  String completePhoneNumber = "";
+
   String? phoneError;
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    otpController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       body: SafeArea(
         child: BlocListener<LoginBloc, LoginState>(
-        listener: (context, state) {
-           if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-         content: Text(state.errorMessage!),
-         ),
-        );
-         }
+          listener: (context, state) {
+            if (state.errorMessage != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage!),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
 
-        if (state.loginSuccess) {
-         Navigator.pushReplacement(
-         context,
-          MaterialPageRoute(
-          builder: (_) => const DashboardScreen(), // Change to your home screen
-         ),
-          );
-
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   SnackBar(
-              //     content: const Row(
-              //       children: [
-              //         Icon(Icons.error_outline, color: Colors.white),
-              //         SizedBox(width: 10),
-              //         Text(
-              //           "Invalid OTP. Please try again!",
-              //           style: TextStyle(
-              //             fontSize: 16,
-              //             fontWeight: FontWeight.w600,
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //     backgroundColor: Colors.red.shade600,
-              //     behavior: SnackBarBehavior.floating,
-              //     margin: const EdgeInsets.all(16),
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(12),
-              //     ),
-              //     duration: const Duration(seconds: 2),
-              //   ),
-              // );
+            if (state.loginSuccess) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const DashboardScreen(),
+                ),
+              );
             }
           },
-        child: BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
 
-                  const Text(
-                    "Welcome Back!",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+          child: BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+
+                    const SizedBox(height: 50),
+
+                    const Text(
+                      "Welcome Back!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                  const Text(
-                    "Login with your phone number",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-
-                  const SizedBox(height: 40),
-                   TextField(
-                      controller: phoneController,
-                     cursorColor: Colors.green,
-                       keyboardType: TextInputType.phone,
-                      maxLength: 10,
-                     onChanged: (value) {
-                       context.read<LoginBloc>().add(
-                         PhoneChanged(value),
-                       );
-
-                       if (phoneError != null) {
-                         setState(() {
-                           phoneError = null;
-                         });
-                       }
-                     },
-                  decoration  : InputDecoration(
-                    hintText: "Phone Number",
-                    errorText: phoneError,
-                    counterText: "",
-                    prefixIcon: const Icon(
-                      Icons.phone,
-                      color: Colors.green,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
+                    const Text(
+                      "Login with your phone number",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
                         color: Colors.grey,
-                        width: 1.2,
+                        fontSize: 15,
                       ),
                     ),
 
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Colors.green,
-                        width: 2,
-                      ),
-                    ),
-
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Colors.red,
-                        width: 2,
-                      ),
-                    ),
-
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Colors.red,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-    ),
-
-                  const SizedBox(height: 20),
-
-                  if (state.otpSent)
-                    TextField(
-                      controller: otpController,
+                    const SizedBox(height: 40),
+                    IntlPhoneField(
+                      controller: phoneController,
+                      initialCountryCode: "IN",
+                      disableLengthCheck: false,
                       cursorColor: Colors.green,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        context.read<LoginBloc>().add(
-                          OtpChanged(value),
-                        );
-                      },
+
                       decoration: InputDecoration(
-                        hintText: "Enter OTP",
+                        hintText: "Phone Number",
+                        errorText: phoneError,
+
                         prefixIcon: const Icon(
-                          Icons.lock,
+                          Icons.phone,
                           color: Colors.green,
                         ),
-                        errorText: state.errorMessage,
 
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: Colors.grey,
-                            width: 1.2,
                           ),
                         ),
 
@@ -190,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: Colors.red,
+                            width: 2,
                           ),
                         ),
 
@@ -201,149 +137,234 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                    ),
-                  const SizedBox(height: 30),
 
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[800],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: state.loading
-                          ? null
-                          : () {
-                        if (!state.otpSent) {
-                          setState(() {
-                            phoneError = null;
-                          });
+                      invalidNumberMessage: "Please enter a valid phone number",
 
-                          if (phoneController.text.trim().isEmpty) {
-                            setState(() {
-                              phoneError = "Please enter your phone number";
-                            });
-                            return;
-                          }
+                      onChanged: (phone) {
 
-                          if (phoneController.text.trim().length != 10) {
-                            setState(() {
-                              phoneError = "Please enter a valid 10-digit phone number";
-                            });
-                            return;
-                          }
+                        completePhoneNumber = phone.completeNumber;
 
-                          context.read<LoginBloc>().add(
-                            PhoneChanged(phoneController.text.trim()),
-                          );
+                        setState(() {
+                          isPhoneValid = phone.number.length == 10;
+                        });
 
-                          context.read<LoginBloc>().add(
-                            SendOtpPressed(),
-                          );
-                        } else {
-                          context.read<LoginBloc>().add(
-                            VerifyOtpPressed(),
-                          );
-                        }
-                      }, // <-- Close the onPressed callback here
 
-                      child: state.loading
-                          ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                          : Text(
-                        state.otpSent ? "Verify OTP" : "Send OTP",
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (state.otpSent)
-                    TextButton(
-                      onPressed: () {
                         context.read<LoginBloc>().add(
-                          SendOtpPressed(),
+                          PhoneChanged(phone.completeNumber),
                         );
+
+
+                        debugPrint("Phone: ${phone.completeNumber}");
+                        debugPrint("Valid: $isPhoneValid");
+
                       },
-                      child: const Text("Resend OTP",
-                      style: TextStyle(
-                        color: Colors.green,
-                      ),),
+
+                      onCountryChanged: (country) {
+                        debugPrint(country.name);
+                        debugPrint(country.code);
+                        debugPrint(country.dialCode);
+                      },
                     ),
 
-                  const SizedBox(height: 30),
+                     const SizedBox(height: 25),
+                    if (state.otpSent) ...[
+                     // const SizedBox(height: 10),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Don't have an account? ",
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const RegisterScreen(),
-                            ),
-                          );
-                        },
+                      Align(
+                        alignment: Alignment.centerLeft,
                         child: Text(
-                          "Register Now",
+                          "Enter OTP",
                           style: TextStyle(
-                            color: Colors.green[800],
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey.shade700,
                           ),
                         ),
                       ),
+
+                      const SizedBox(height: 15),
+
+                      Pinput(
+                        controller: otpController,
+                        length: 4,
+                        keyboardType: TextInputType.number,
+
+                        forceErrorState: state.errorMessage != null,
+                        errorText: state.errorMessage,
+
+                        defaultPinTheme: PinTheme(
+                          width: 50,
+                          height: 50,
+                          textStyle: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+
+                        focusedPinTheme: PinTheme(
+                          width: 65,
+                          height: 65,
+                          textStyle: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: state.errorMessage != null
+                                  ? Colors.red
+                                  : Colors.green,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+
+                        errorPinTheme: PinTheme(
+                          width: 65,
+                          height: 65,
+                          textStyle: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.red,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+
+                        onChanged: (value) {
+                          context.read<LoginBloc>().add(
+                            OtpChanged(value),
+                          );
+                        },
+
+                        onCompleted: (value) {
+                          context.read<LoginBloc>().add(
+                            OtpChanged(value),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: state.loading
+                              ? null
+                              : () {
+                            otpController.clear();
+
+                            context.read<LoginBloc>().add(
+                              SendOtpPressed(),
+                            );
+                          },
+                          child: const Text(
+                            "Resend OTP",
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
                     ],
-                  ),
-                ],
-              ),
-            );
-          },
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green[800],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: state.loading
+                            ? null
+                            : () {
+                          if (!state.otpSent) {
+                            setState(() {
+                              phoneError = null;
+                            });
+
+                            if (!isPhoneValid) {
+                              setState(() {
+                                phoneError = "Please enter a valid phone number";
+                              });
+                              return;
+                            }
+
+                            context.read<LoginBloc>().add(
+                              SendOtpPressed(),
+                            );
+                          } else {
+                            if (otpController.text.length != 4) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Please enter the 4-digit OTP",
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            context.read<LoginBloc>().add(
+                              VerifyOtpPressed(),
+                            );
+                          }
+                        },
+                        child: state.loading
+                            ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                            : Text(
+                          state.otpSent
+                              ? "Verify OTP"
+                              : "Send OTP",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //const SizedBox(height: 25),
+
+                   //
+
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
-    ),
-    ),
+      ),
     );
-    
   }
-
-  // final phoneController = TextEditingController();
-  // final otpController = TextEditingController();
-
-  bool validatePhone() {
-    final phone = phoneController.text.trim();
-
-    if (phone.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter phone number"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return false;
-    }
-
-    if (phone.length != 10) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter a valid 10-digit phone number"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return false;
-    }
-
-    return true;
-  }
-  
 }

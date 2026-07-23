@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrbani_vender_app/Core/services/api_service.dart';
 
 import '../../Core/constants/app_text_style.dart';
+import '../../Core/repository/add_inventory_repository.dart';
 import '../../blocs/features/add_inventory/add_inventory_bloc.dart';
 import '../../blocs/features/bottom_nav/bottom_nav_bloc.dart';
 import '../../blocs/features/bottom_nav/bottom_nav_event.dart';
@@ -71,7 +73,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => BlocProvider(
-                    create: (_) => AddInventoryBloc(),
+                    create: (_) => AddInventoryBloc(InventoryRepository(
+                        ApiService()
+                    )),
                     child: const AddInventoryScreen(),
                   ),
                 ),
